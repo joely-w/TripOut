@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Range Check - Geographical
+    </title>
+</head>
+
+<body>
+<form>
+    <input type="text" id="long1" placeholder="Longitude 1" value="-2.210500">
+    <input type="text" id="lat1" placeholder="Latitude 1" value="53.112700">
+    <input type="number" id="radius" placeholder="Radius">
+    <input type="text" id="long2" placeholder="Longitude 2" value="-2.228090">
+    <input type="text" id="lat2" placeholder="Latitude 2" value="53.105670">
+    <a onclick="calculate()" href="#">Calcy boi</a>
+</form>
+
+</body>
+<script>
+    function calculate() {
+        var centerx = parseFloat(document.getElementById("long1").value);
+        var centery = parseFloat(document.getElementById("lat1").value);
+        var radius = parseFloat(document.getElementById("radius").value);
+        var pointx = parseFloat(document.getElementById("long2").value);
+        var pointy = parseFloat(document.getElementById("lat2").value);
+        console.log(centerx);
+        var distance = Math.sqrt(Math.pow(centerx - pointx, 2) + Math.pow(centery - pointy, 2));
+        alert(distance);
+    }
+</script>
+
+</html>
