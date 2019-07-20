@@ -2,15 +2,21 @@
     width: 100%;
     text-align: center;
 }
-
 #navbar-primary .navbar-nav > li {
     display: inline-block;
     float: none;
 }
-
 #navbar-primary .navbar-nav > li > a {
+    color: #feaa00;
     padding-left: 30px;
     padding-right: 30px;
 }
 
-/*# sourceMappingURL=style.css.map */
+.dropdown .login {
+    max-width: 100px;
+}
+
+.dropdown .login input {
+    display: block;
+    color: red;
+}
