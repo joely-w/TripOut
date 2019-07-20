@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" serverName="TripOut">
+  <component name="PublishConfigData" serverName="TripOut" uploadOnCheckin="b995bb7a-34c4-4cef-ba61-7dc6073105dc">
     <serverData>
       <paths name="TripOut">
         <serverdata>
@@ -10,5 +10,6 @@
         </serverdata>
       </paths>
     </serverData>
+    <option name="myUploadOnCheckinName" value="TripOut" />
   </component>
 </project>
