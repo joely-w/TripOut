@@ -12,11 +12,25 @@
     padding-right: 30px;
 }
 
-.dropdown .login {
-    max-width: 100px;
+.dropdown-menu {
+    text-align: center;
+    min-width: 200px;
+    padding: 10px;
 }
 
-.dropdown .login input {
+.dropdown-menu h1 {
+    margin: 0;
+}
+
+.dropdown-menu .login input {
+    text-align: center;
+    margin: 10px 0;
+    background-color: white;
     display: block;
-    color: red;
+    color: #feaa00;
+}
+
+.dropdown-menu .btn {
+    background-color: #feaa00;
+    color: white;
 }

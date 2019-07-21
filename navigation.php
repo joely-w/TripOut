@@ -17,7 +17,21 @@
                     <li><a href="#"><img id="logo-navbar-middle" src="/images/logo.png" width="200" alt="Trip Out Logo"></a>
                     </li>
                     <li><a href="#">Create</a></li>
-                    <li><a href="#">Account</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Account
+                        </a>
+                        <div class="dropdown-menu">
+                            <h3>Login</h3>
+                            <form class="login" role="login" method="post" action="#">
+                                <input class="form-control" type="text" placeholder="Email" name="email">
+                                <input class="form-control" type="password" placeholder="Password" name="password"
+                                       required>
+                                <button class="btn">Login</button>
+                            </form>
+                            <a href="#">Don't have an account?</a>
+                        </div>
                 </ul>
             </div>
         </div>
