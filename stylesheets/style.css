@@ -1,11 +1,18 @@
+/*Navigation Bar*/
+.navbar {
+    margin-bottom: 0;
+}
+
 #navbar-primary .navbar-nav {
     width: 100%;
     text-align: center;
 }
+
 #navbar-primary .navbar-nav > li {
     display: inline-block;
     float: none;
 }
+
 #navbar-primary .navbar-nav > li > a {
     color: #feaa00;
     padding-left: 30px;
@@ -16,13 +23,18 @@
     text-align: center;
     min-width: 200px;
     padding: 10px;
+    border: solid 1px #feaa00;
+    border-radius: 10px !important;
+    -webkit-box-shadow: 10px 10px 15px -8px rgba(254, 170, 0, 0.42);
+    -moz-box-shadow: 10px 10px 15px -8px rgba(254, 170, 0, 0.42);
+    box-shadow: 10px 10px 15px -8px rgba(254, 170, 0, 0.42); /*Uses rgba as opacity needs to be set, which hex does not support*/
 }
 
-.dropdown-menu h1 {
-    margin: 0;
+.dropdown-menu h3 {
+    margin: 0; /*Default header has margins, which are not needed*/
 }
 
-.dropdown-menu .login input {
+.dropdown-menu .login input { /*Style the fields to suite dropdown theme*/
     text-align: center;
     margin: 10px 0;
     background-color: white;
@@ -33,4 +45,88 @@
 .dropdown-menu .btn {
     background-color: #feaa00;
     color: white;
+}
+
+/*Hero slider*/
+
+.hero {
+    max-width: 1920px;
+    position: relative;
+}
+
+.hero .prev,
+.hero .next {
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    width: 40px;
+    height: 100%;
+    cursor: pointer;
+}
+
+.hero .prev {
+    left: 0;
+}
+
+.hero .next {
+    right: 0;
+}
+
+.hero .prev .arrow-left {
+    height: 20px; /*Make div into small box*/
+    width: 20px;
+    border-top: 5px solid #fff; /*Make a white corner*/
+    border-right: 5px solid #fff;
+    position: absolute; /*Place the arrow in correct position*/
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-20%, -50%) rotate(225deg);
+    -ms-transform: translate(-20%, -50%) rotate(225deg);
+    -o-transform: translate(-20%, -50%) rotate(225deg);
+    transform: translate(-20%, -50%) rotate(225deg); /* Rotate div to create an arrow and move back into place*/
+}
+
+
+.hero .next .arrow-right {
+    height: 20px;
+    width: 20px;
+    border-top: 5px solid #fff;
+    border-right: 5px solid #fff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-70%, -50%) rotate(45deg);
+    -ms-transform: translate(-70%, -50%) rotate(45deg);
+    -o-transform: translate(-70%, -50%) rotate(45deg);
+    transform: translate(-70%, -50%) rotate(45deg);
+}
+
+.hero ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    position: relative;
+    height: 800px;
+    max-width: 100%;
+}
+
+.hero li {
+    min-width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transition: 0.6s ease-in-out;
+}
+
+.hero li.visible {
+    opacity: 1;
+    transition: 0.6s ease-in-out;
+}
+
+.hero li img {
+    display: block;
+    width: 100%;
+    height: 100%;
 }

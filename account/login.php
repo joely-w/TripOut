@@ -1,7 +1,5 @@
-<form method="post" action="authenticate.php">
-    <input name="username" type="text" placeholder="Username"><br>
-    <input name="password" type="password" placeholder="Password"><br>
-    <button>
-        Submit
-    </button>
+<form class="login" role="login" method="post" action="#">
+    <input class="form-control" type="text" placeholder="Email" name="email">
+    <input class="form-control" type="password" placeholder="Password" name="password" required>
+    <button class="btn">Login</button>
 </form>
