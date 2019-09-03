@@ -1,3 +1,16 @@
+/*Fonts*/
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,900&display=swap');
+/*Universal styles*/
+body {
+    text-align: center;
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+h1, h2, h3 {
+    font-weight: 900;
+}
+
+
 /*Navigation Bar*/
 .navbar {
     margin-bottom: 0;
@@ -34,7 +47,7 @@
     margin: 0; /*Default header has margins, which are not needed*/
 }
 
-.dropdown-menu .login input { /*Style the fields to suite dropdown theme*/
+.dropdown-menu input { /*Style the fields to suite dropdown theme*/
     text-align: center;
     margin: 10px 0;
     background-color: white;
@@ -125,8 +138,140 @@
     transition: 0.6s ease-in-out;
 }
 
+.hero li .header {
+    z-index: 10;
+    position: absolute;
+    top: 45%;
+    left: 45%;
+    font-size: 45px;
+}
+
 .hero li img {
     display: block;
     width: 100%;
     height: 100%;
 }
+
+/*Login and Registration Form*/
+
+.reg, .login {
+    max-width: 20%;
+    position: absolute;
+    top: 5%;
+    left: 40%;
+}
+
+.login input[type="text"], .login input[type="password"], .reg input[type="text"], .reg input[type="password"] {
+    text-align: center;
+    width: 350px;
+    padding: 20px 0;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid #435160;
+    outline: none;
+    color: #6D7781;
+    font-size: 16px;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active { /* Change Autocomplete styles in Chrome*/
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+.login input[type=checkbox], .reg input[type=checkbox] {
+    display: none;
+}
+
+.reg label, .login label {
+    display: block;
+    position: absolute;
+    margin-right: 10px;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: transparent;
+    content: "";
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+    border: 3px solid #435160;
+}
+
+#agree:checked ~ label[for=agree] {
+    background: #435160;
+}
+
+.reg input[type="submit"], .login input[type="submit"] {
+    background: #1FCE6D;
+    border: 0;
+    width: 350px;
+    height: 40px;
+    border-radius: 3px;
+    color: #fff;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+}
+
+.login input[type="submit"]:hover, .reg input[type="submit"]:hover {
+    background: #16aa56;
+    animation-name: shake;
+}
+
+.reg .forgot, .login .forgot {
+    margin-top: 30px;
+    display: block;
+    font-size: 13px;
+    text-align: center;
+    font-weight: bold;
+    color: white;
+}
+
+.reg .forgot:hover, .login .forgot:hover {
+    margin-top: 30px;
+    display: block;
+    text-align: center;
+    font-weight: bold;
+    color: #feaa00;
+}
+
+.reg .agree, .login .agree {
+    padding: 30px 0;
+    font-size: 12px;
+    text-indent: 25px;
+    line-height: 15px;
+}
+
+::-webkit-input-placeholder {
+    color: #435160;
+    font-size: 18px;
+}
+
+.animated {
+    animation-fill-mode: both;
+    animation-duration: 1s;
+}
+
+@keyframes shake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    10%, 30%, 50%, 70%, 90% {
+        transform: translateX(-10px);
+    }
+    20%, 40%, 60%, 80% {
+        transform: translateX(10px);
+    }
+}
+
+.error {
+    font-size: 15px;
+    color: red;
+}
+
+.login input[type=password] {
+    margin-bottom: 25px;
+}
+
+

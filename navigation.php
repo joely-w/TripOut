@@ -17,23 +17,31 @@
                     <li><a href="#"><img id="logo-navbar-middle" src="/images/logo.png" width="200" alt="Trip Out Logo"></a>
                     </li>
                     <li><a href="#">Create</a></li>
-                    <li class="nav-item dropdown">
+                    <?php if (!isset($_SESSION['Username'])) { ?>
+                        <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Account
                         </a>
                         <div class="dropdown-menu">
-                            <h3>Login</h3>
-                            <form class="login" role="login" method="post" action="#">
-                                <input class="form-control" type="text" placeholder="Email" name="email">
-                                <input class="form-control" type="password" placeholder="Password" name="password"
-                                       required>
-                                <button class="btn">Login</button>
-                            </form>
-                            <a href="#">Don't have an account?</a>
-                        </div>
-                </ul>
+                        <h3>Login</h3>
+                        <form method="post" id="loginform" action="#">
+                            <input class="form-control" type="text" placeholder="Email or Username" name="id" required/>
+                            <input class="form-control" type="password" placeholder="Password" name="password"
+                                   required/>
+                            <button class="btn">Login</button>
+                        </form>
+                        <a href="/account/register.php">Don't have an account?</a>
+                    <?php } else {
+                        ?>
+                        <li><a href="/account/manage.php"><?php echo ucfirst($_SESSION['Username']) ?></a></li>
+
+                        <?php
+                    }
+                    ?>
             </div>
+            </ul>
+        </div>
         </div>
     </nav>
 </header>
