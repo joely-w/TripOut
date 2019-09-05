@@ -1,5 +1,6 @@
 <?php
 $title = "Login";
+#No login script in script array as already included in navigation bar
 include('../header.php'); ?>
 <body>
 <?php include('../navigation.php'); ?>

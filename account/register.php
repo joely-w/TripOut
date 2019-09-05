@@ -1,5 +1,6 @@
 <?php
 $title = "Register";
+$scripts = array("register.js");
 include('../header.php'); ?>
 <body class="fullscreenpage">
 <?php include('../navigation.php'); ?>

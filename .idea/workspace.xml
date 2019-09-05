@@ -1,29 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="00937af3-d732-489f-a6ae-30b920dca985" name="Default Changelist" comment="Login and registration system working, including in Navigation bar.">
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/templateLanguages.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/account/ajax.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/account/login_process.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/account/logout.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/account/manage.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/favicon.ico" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/login.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/images/register.jpg" afterDir="false" />
+    <list default="true" id="00937af3-d732-489f-a6ae-30b920dca985" name="Default Changelist" comment="New styling for registration/login form">
+      <change afterPath="$PROJECT_DIR$/account/login.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/account/manage.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/account/register.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account/ajax.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/account/login.php" beforeDir="false" afterPath="$PROJECT_DIR$/account/login.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/reg_process.php" beforeDir="false" afterPath="$PROJECT_DIR$/account/reg_process.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account/manage.php" beforeDir="false" afterPath="$PROJECT_DIR$/account/manage.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account/manage_process.php" beforeDir="false" afterPath="$PROJECT_DIR$/account/manage_process.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/account/register.php" beforeDir="false" afterPath="$PROJECT_DIR$/account/register.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/config.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/config.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/geographical/rangecheck.html" beforeDir="false" afterPath="$PROJECT_DIR$/geographical/rangecheck.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/form.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/header.php" beforeDir="false" afterPath="$PROJECT_DIR$/header.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hero.js" beforeDir="false" afterPath="$PROJECT_DIR$/hero.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/images/logo.png" beforeDir="false" afterPath="$PROJECT_DIR$/images/logo.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/navigation.php" beforeDir="false" afterPath="$PROJECT_DIR$/navigation.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stylesheets/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/stylesheets/style.css" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -79,6 +70,12 @@
         <option value="Joel Winterton &lt;joely-w@users.noreply.github.com&gt;" />
         <option value="Joel Winterton" />
       </list>
+    </option>
+    <option name="PUSH_TAGS">
+      <GitPushTagMode>
+        <option name="argument" value="--tags" />
+        <option name="title" value="All" />
+      </GitPushTagMode>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -184,7 +181,12 @@
       <workItem from="1567028748775" duration="5062000" />
       <workItem from="1567111985343" duration="5919000" />
       <workItem from="1567261705271" duration="11562000" />
-      <workItem from="1567515457779" duration="2733000" />
+      <workItem from="1567515457779" duration="9028000" />
+      <workItem from="1567601113005" duration="646000" />
+      <workItem from="1567607636330" duration="3155000" />
+      <workItem from="1567617064422" duration="870000" />
+      <workItem from="1567694564508" duration="1867000" />
+      <workItem from="1567696648905" duration="928000" />
     </task>
     <task id="LOCAL-00001" summary="Init">
       <created>1563635544749</created>
@@ -228,7 +230,35 @@
       <option name="project" value="LOCAL" />
       <updated>1564505743843</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Login and registration system functional, including in Navigation bar.">
+      <created>1567530850772</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1567530850772</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Login and registration system functional, including in Navigation bar.">
+      <created>1567609567490</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1567609567490</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Takes POST data and updates fields">
+      <created>1567696162472</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1567696162472</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Now has login object for account management">
+      <created>1567696569639</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1567696569639</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -237,9 +267,44 @@
   <component name="UpdateCopyrightCheckinHandler">
     <option name="UPDATE_COPYRIGHT" value="true" />
   </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ORDER">
+      <list>
+        <option value="0" />
+        <option value="2" />
+        <option value="3" />
+        <option value="1" />
+      </list>
+    </option>
+  </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
+        <entry key="1">
+          <value>
+            <State>
+              <option name="SHOW_ONLY_AFFECTED_CHANGES" value="true" />
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                  <entry key="structure">
+                    <value>
+                      <list>
+                        <option value="dir:C:/Users/joely/PhpstormProjects/TripOut/account" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
         <entry key="MAIN">
           <value>
             <State>
@@ -257,7 +322,10 @@
     <MESSAGE value="Adds dropdown login to navbar" />
     <MESSAGE value="Initial project" />
     <MESSAGE value="Login and registration system working, including in Navigation bar." />
-    <option name="LAST_COMMIT_MESSAGE" value="Login and registration system working, including in Navigation bar." />
+    <MESSAGE value="Login and registration system functional, including in Navigation bar." />
+    <MESSAGE value="Takes POST data and updates fields" />
+    <MESSAGE value="Now has login object for account management" />
+    <option name="LAST_COMMIT_MESSAGE" value="Now has login object for account management" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />

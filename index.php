@@ -1,4 +1,6 @@
-<?php include('header.php'); ?>
+<?php
+$title = "Home";
+include('header.php'); ?>
 <body>
 <?php include('navigation.php'); ?>
 <div class="hero">
@@ -8,6 +10,10 @@
     <ul class="slider">
         <li class="visible"> <!-- Current visible slide -->
             <img src="images/events/headers/background.jpg"/>
+        </li>
+        <li>
+            <img src="images/events/headers/background2.jpg"/>
+            <!--Hidden slide -->
         </li>
         <li>
             <img src="https://www.tribaeast.com/wp-content/uploads/2019/04/Voyager-of-the-Sea-Promotion-Banner.jpg"/>
