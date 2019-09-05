@@ -135,8 +135,8 @@ class Login extends CRUD
     }
 
     public function AccountFields()
-    {
-        return $this->getData("SELECT * FROM LinkedEditable"); #Return each field name along with whether they are editable in an array
+    { #Returns array of editable fields
+        return $this->getData("SELECT UserField,Datatype,Viewable FROM LinkedEditable WHERE Editable=1"); #Return each field name along with whether they are editable in an array
     }
 
     public function UpdateField($field)
@@ -147,10 +147,15 @@ class Login extends CRUD
         if ($query[0] == true) {
             return ($this->Execute("UPDATE Users SET $field='$value';")); #Insert $_SESSION value into database, return boolean regarding success
         } else {
+            $this->errors[] = "Field cannot be updated!";
             return false;
         }
     }
 
+    public function SaveSession($field, $value)
+    {
+        $_SESSION[$field] = $value;
+    }
     public function LoginDevice($data)
     { #Save login details to $_SESSION, thus 'logging in' device
         foreach ($data as $key => $element) {
