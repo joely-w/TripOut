@@ -133,7 +133,9 @@ class Login extends CRUD
             session_start();
         }
     }
-
+    public function DeleteAccount($username){
+        $query = "DELETE FROM Users WHERE Username='$username'";
+    }
     public function AccountFields()
     { #Returns array of editable fields
         return $this->getData("SELECT UserField,Datatype,Viewable FROM LinkedEditable WHERE Editable=1"); #Return each field name along with whether they are editable in an array
@@ -150,11 +152,6 @@ class Login extends CRUD
             $this->errors[] = "Field cannot be updated!";
             return false;
         }
-    }
-
-    public function SaveSession($field, $value)
-    {
-        $_SESSION[$field] = $value;
     }
     public function LoginDevice($data)
     { #Save login details to $_SESSION, thus 'logging in' device

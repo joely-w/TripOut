@@ -1,20 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="00937af3-d732-489f-a6ae-30b920dca985" name="Default Changelist" comment="New styling for registration/login form">
-      <change afterPath="$PROJECT_DIR$/account/login.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/account/manage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/account/register.js" afterDir="false" />
+    <list default="true" id="00937af3-d732-489f-a6ae-30b920dca985" name="Default Changelist" comment="Image resources">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/ajax.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/login.php" beforeDir="false" afterPath="$PROJECT_DIR$/account/login.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/manage.php" beforeDir="false" afterPath="$PROJECT_DIR$/account/manage.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.sass-cache/10d40a5e8dc332c9398859e7fac756c51ecc1fa0/style.scssc" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/account/manage_process.php" beforeDir="false" afterPath="$PROJECT_DIR$/account/manage_process.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/register.php" beforeDir="false" afterPath="$PROJECT_DIR$/account/register.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/form.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/header.php" beforeDir="false" afterPath="$PROJECT_DIR$/header.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/config.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/config.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/geographical/rangecheck.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/navigation.php" beforeDir="false" afterPath="$PROJECT_DIR$/navigation.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -186,7 +179,8 @@
       <workItem from="1567607636330" duration="3155000" />
       <workItem from="1567617064422" duration="870000" />
       <workItem from="1567694564508" duration="1867000" />
-      <workItem from="1567696648905" duration="928000" />
+      <workItem from="1567696648905" duration="6153000" />
+      <workItem from="1567792115269" duration="236000" />
     </task>
     <task id="LOCAL-00001" summary="Init">
       <created>1563635544749</created>
@@ -258,7 +252,42 @@
       <option name="project" value="LOCAL" />
       <updated>1567696569639</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Registration and login system working, including navigation">
+      <created>1567697654116</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1567697654116</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Geographical module not yet developed">
+      <created>1567700129361</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1567700129361</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Geographical module not yet developed">
+      <created>1567700556227</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1567700556227</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Image resources">
+      <created>1567712559709</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1567712559709</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Now includes styles for login and registration system">
+      <created>1567712638478</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1567712638478</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -316,7 +345,8 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="CHECK_NEW_TODO" value="false" />
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Init" />
     <MESSAGE value="Adds dropdown login to navbar" />
@@ -325,10 +355,11 @@
     <MESSAGE value="Login and registration system functional, including in Navigation bar." />
     <MESSAGE value="Takes POST data and updates fields" />
     <MESSAGE value="Now has login object for account management" />
-    <option name="LAST_COMMIT_MESSAGE" value="Now has login object for account management" />
-    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
-    <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
-    <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
+    <MESSAGE value="Registration and login system working, including navigation" />
+    <MESSAGE value="Geographical module not yet developed" />
+    <MESSAGE value="Image resources" />
+    <MESSAGE value="Now includes styles for login and registration system" />
+    <option name="LAST_COMMIT_MESSAGE" value="Now includes styles for login and registration system" />
   </component>
   <component name="masterDetails">
     <states>

@@ -12,10 +12,6 @@ include('header.php'); ?>
             <img src="images/events/headers/background.jpg"/>
         </li>
         <li>
-            <img src="images/events/headers/background2.jpg"/>
-            <!--Hidden slide -->
-        </li>
-        <li>
             <img src="https://www.tribaeast.com/wp-content/uploads/2019/04/Voyager-of-the-Sea-Promotion-Banner.jpg"/>
             <!--Hidden slide -->
         </li>
