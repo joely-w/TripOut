@@ -32,7 +32,7 @@ class Database
 
 class CRUD extends Database
 {
-    #The purpose of methods will be described by the function declaration
+    #The purpose of methods will be described alongside the function declarations
 
 
     public function __construct()

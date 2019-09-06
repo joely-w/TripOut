@@ -3,11 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="00937af3-d732-489f-a6ae-30b920dca985" name="Default Changelist" comment="Image resources">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.sass-cache/10d40a5e8dc332c9398859e7fac756c51ecc1fa0/style.scssc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/manage_process.php" beforeDir="false" afterPath="$PROJECT_DIR$/account/manage_process.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database/config.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/config.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/geographical/rangecheck.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -180,7 +176,7 @@
       <workItem from="1567617064422" duration="870000" />
       <workItem from="1567694564508" duration="1867000" />
       <workItem from="1567696648905" duration="6153000" />
-      <workItem from="1567792115269" duration="236000" />
+      <workItem from="1567792115269" duration="434000" />
     </task>
     <task id="LOCAL-00001" summary="Init">
       <created>1563635544749</created>
@@ -287,7 +283,14 @@
       <option name="project" value="LOCAL" />
       <updated>1567712638478</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Image resources">
+      <created>1567792393226</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1567792393226</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -357,9 +360,9 @@
     <MESSAGE value="Now has login object for account management" />
     <MESSAGE value="Registration and login system working, including navigation" />
     <MESSAGE value="Geographical module not yet developed" />
-    <MESSAGE value="Image resources" />
     <MESSAGE value="Now includes styles for login and registration system" />
-    <option name="LAST_COMMIT_MESSAGE" value="Now includes styles for login and registration system" />
+    <MESSAGE value="Image resources" />
+    <option name="LAST_COMMIT_MESSAGE" value="Image resources" />
   </component>
   <component name="masterDetails">
     <states>
