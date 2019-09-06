@@ -1,4 +1,8 @@
 <?php
+/**
+ * @todo Create Delete Method
+ * @body Create Delete Method in Login Object after database structure has been fully created,so as to ensure cascading is set up properly.
+ */
 /*Should only be used for API*/
 
 #Parent class for connection to database
