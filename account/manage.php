@@ -10,27 +10,38 @@ $account = new Login();
 <?php include('../navigation.php'); ?>
 
 <div class="container">
-    <div class="row">
+    <div class="row manage">
+        <div id="report"></div> <!--Content updated if error occurs!-->
+
         <?php
-        $fields = $account->AccountFields();
-        foreach ($fields as $field) {
-            if ($field["Viewable"] == true) {#If actual value of field should not be view by user, hide it (for instance password)
-                $valueAttribute = $_SESSION[$field['UserField']];
-            } else {
-                $valueAttribute = "Hidden value";
-            }
+        if (isset($_SESSION['Username'])) {
             ?>
-            <div class="col-md-4">
-                <label>
-                    <?php echo $field['UserField'] ?>:<br>
-                    <input type="<?php echo $field['Datatype'] ?>" name="<?php echo $field['UserField'] ?>"
-                           value="<?php echo $valueAttribute ?>"
-                           onchange="update(<?php echo $field['UserField'] ?>,this.value)"/>
-                </label>
-            </div>
             <?
+            $fields = $account->AccountFields();
+            foreach ($fields as $field) {
+                if ($field["Viewable"] == true) {#If actual value of field should not be view by user, hide it (for instance password)
+                    $valueAttribute = $_SESSION[$field['UserField']];
+                } else {
+                    $valueAttribute = "Hidden value";
+                }
+                ?>
+                <div class="col-md-4">
+                    <label>
+                        <?php echo $field['UserField'] ?>:<br>
+                        <input type="<?php echo $field['Datatype'] ?>" name="<?php echo $field['UserField'] ?>"
+                               value="<?php echo $valueAttribute ?>"
+                               onchange="updateValue('<?php echo $field['UserField'] ?>',this.value)"
+                               class="form-control"/>
+                    </label>
+                </div>
+                <?
+            }
+        } else {
+            echo "Not logged in!";
         }
         ?>
+        <button onclick="LogOut()">Logout</button>
+
     </div>
 </div>
 
