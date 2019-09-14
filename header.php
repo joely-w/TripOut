@@ -14,5 +14,13 @@ session_start(); #Start session on all pages before headers are sent
             <script src="<?php echo $path ?>"></script>
             <?
         }
-    } ?>
+    }
+    if (isset($styles)) { #If any unique scripts are required, set in pages $script array.
+        foreach ($styles as $path) {
+            ?>
+            <link rel="stylesheet" href="<?php echo $path ?>"/>
+            <?
+        }
+    }
+    ?>
 </head>
