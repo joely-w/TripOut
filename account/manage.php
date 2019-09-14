@@ -35,12 +35,17 @@ $account = new Login();
                     </label>
                 </div>
                 <?
-            }
+            } ?>
+            <button type="button" onclick="LogOut()" class="btn btn-primary">Logout</button>
+            <?
         } else {
-            echo "Not logged in!";
+            ?>
+            <div class="alert alert-danger" role="alert">
+                You're not logged in! <a href="login.php">Login now</a>
+            </div>
+            <?
         }
         ?>
-        <button onclick="LogOut()">Logout</button>
 
     </div>
 </div>
