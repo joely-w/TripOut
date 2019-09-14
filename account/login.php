@@ -16,7 +16,7 @@ include('../header.php'); ?>
                     ?>
                     <h1 id="register">Login</h1>
                     <div id="errorfield"></div> <!--Content updated if error occurs!-->
-                    <form id="loginform" action="login_process.php" method="post">
+                    <form id="loginForm">
                         <input name='id' placeholder='Username' type='text'/>
                         <input id='pw' name='password' placeholder='Password' type='password'/>
                         <input class='animated' type='submit' value='Login'/>

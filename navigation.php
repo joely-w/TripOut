@@ -27,6 +27,7 @@
                         <div class="dropdown-menu">
                         <h3>Login</h3>
                         <form method="post" id="loginform" action="#">
+                            <input type="hidden" name="navbar" value="true" />
                             <input class="form-control" type="text" placeholder="Email or Username" name="id" required/>
                             <input class="form-control" type="password" placeholder="Password" name="password"
                                    required/>
