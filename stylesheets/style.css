@@ -1,17 +1,18 @@
 /*Fonts*/
 @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,900|Yantramanav&display=swap');
 /*Universal styles*/
-body{
-    overflow-x:hidden;
+body {
+    overflow-x: hidden;
 }
-h1,h2,h3,h4 {
-    text-align: center;
+
+h1, h2, h3, h4 {
     font-family: 'Source Sans Pro', sans-serif;
-    font-weight:900;
+    font-weight: 900;
 }
-span,p{
+
+span, p {
     font-family: 'Yantramanav', sans-serif;
-    font-size:18px;
+    font-size: 18px;
 }
 
 /*Navigation Bar*/
@@ -250,8 +251,9 @@ input:-webkit-autofill:active { /* Change Autocomplete styles in Chrome*/
     color: #435160;
     font-size: 18px;
 }
+
 #loginForm input {
-    color:white;
+    color: white;
     font-size: 20px;
 }
 
@@ -281,17 +283,49 @@ input:-webkit-autofill:active { /* Change Autocomplete styles in Chrome*/
     margin-bottom: 25px;
 }
 
-.manage{
-    text-align:center;
+.manage {
+    text-align: center;
 }
+
 /*Style for events*/
-.events h1{
-    margin:40px;
+.create {
+    text-align: center;
+}
+
+.events h1 {
+    margin: 40px;
 
 }
-.event-thumb{ /*Thumbnail events*/
-    text-align:center;
+
+.event-thumb { /*Thumbnail events*/
+    text-align: center;
 }
-.event-thumb img{
-    width:100%; /*Make image fit thumb box*/
+
+.event-thumb img {
+    width: 100%; /*Make image fit thumb box*/
+}
+.content{
+    display:inline-block;
+    width:75%;
+    margin-left:auto;
+    margin-right:auto;
+
+}
+
+.toolbox {
+    text-align: center;
+    width: 250px;
+    float: left;
+    margin: 20px;
+    padding: 30px;
+    border: dotted orange 7px;
+}
+
+.toolbox span {
+    display: inline-block;
+}
+
+.toolbox button {
+    display: block;
+    margin: 5px;
 }
