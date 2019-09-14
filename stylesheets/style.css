@@ -1,6 +1,9 @@
 /*Fonts*/
 @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,900|Yantramanav&display=swap');
 /*Universal styles*/
+body{
+    overflow-x:hidden;
+}
 h1,h2,h3,h4 {
     text-align: center;
     font-family: 'Source Sans Pro', sans-serif;
@@ -247,6 +250,10 @@ input:-webkit-autofill:active { /* Change Autocomplete styles in Chrome*/
     color: #435160;
     font-size: 18px;
 }
+#loginForm input {
+    color:white;
+    font-size: 20px;
+}
 
 .animated {
     animation-fill-mode: both;
@@ -272,6 +279,10 @@ input:-webkit-autofill:active { /* Change Autocomplete styles in Chrome*/
 
 .login input[type=password] {
     margin-bottom: 25px;
+}
+
+.manage{
+    text-align:center;
 }
 /*Style for events*/
 .events h1{
