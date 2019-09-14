@@ -1,15 +1,15 @@
 /*Fonts*/
-@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,900&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,900|Yantramanav&display=swap');
 /*Universal styles*/
-body {
+h1,h2,h3,h4 {
     text-align: center;
     font-family: 'Source Sans Pro', sans-serif;
+    font-weight:900;
 }
-
-h1, h2, h3 {
-    font-weight: 900;
+span,p{
+    font-family: 'Yantramanav', sans-serif;
+    font-size:18px;
 }
-
 
 /*Navigation Bar*/
 .navbar {
@@ -148,7 +148,7 @@ h1, h2, h3 {
 
 .hero li img {
     display: block;
-    width: 100%;
+    width: 100vw;
     height: 100%;
 }
 
@@ -273,5 +273,14 @@ input:-webkit-autofill:active { /* Change Autocomplete styles in Chrome*/
 .login input[type=password] {
     margin-bottom: 25px;
 }
+/*Style for events*/
+.events h1{
+    margin:40px;
 
-
+}
+.event-thumb{ /*Thumbnail events*/
+    text-align:center;
+}
+.event-thumb img{
+    width:100%; /*Make image fit thumb box*/
+}
