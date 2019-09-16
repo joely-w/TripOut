@@ -187,7 +187,7 @@ class Login extends CRUD
 }
 
 class myImages extends CRUD
-{
+{#For displaying images
     public function __construct()
     {
         parent::__construct();
