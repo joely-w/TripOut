@@ -15,6 +15,7 @@ include('../header.php'); ?>
         <button type="button" onclick="Add('review')" class="btn btn-primary">Add review</button>
 
     </div>!-->
+
     <div id="content" class="content"> <!-- All content will be appended to this div-->
         <form>
             <input class="form-control" type="text" name="title" placeholder="Event Title"/>
