@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="00937af3-d732-489f-a6ae-30b920dca985" name="Default Changelist" comment="Image resources">
+    <list default="true" id="00937af3-d732-489f-a6ae-30b920dca985" name="Default Changelist" comment="Fields only edited if already allowed, editing happens onchange of field">
+      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/joely.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account/login.js" beforeDir="false" afterPath="$PROJECT_DIR$/account/login.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account/login.php" beforeDir="false" afterPath="$PROJECT_DIR$/account/login.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database/config.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/config.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/events/create.js" beforeDir="false" afterPath="$PROJECT_DIR$/events/create.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/events/create.php" beforeDir="false" afterPath="$PROJECT_DIR$/events/create.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/navigation.php" beforeDir="false" afterPath="$PROJECT_DIR$/navigation.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/stylesheets/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/stylesheets/style.css" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -48,7 +55,21 @@
         <item name="MySQL - TripOut@138.68.135.248" type="feb32156:DbDataSourceImpl" />
         <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
         <item name="TripOut: schema" type="76f4a085:MysqlImplModel$Schema" />
-        <item name="LinkedEditable: table" type="285a2a93:MysqlImplModel$Table" />
+        <item name="Events: table" type="285a2a93:MysqlImplModel$Table" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="MySQL - TripOut@138.68.135.248" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="TripOut: schema" type="76f4a085:MysqlImplModel$Schema" />
+        <item name="Images: table" type="285a2a93:MysqlImplModel$Table" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="MySQL - TripOut@138.68.135.248" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="TripOut: schema" type="76f4a085:MysqlImplModel$Schema" />
+        <item name="Users: table" type="285a2a93:MysqlImplModel$Table" />
       </path>
     </expand>
     <select />
@@ -97,7 +118,7 @@
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="Template Data Languages" />
+    <property name="settings.editor.selected.configurable" value="preferences.externalResources" />
     <property name="two.files.diff.last.used.folder" value="C:/stylesheets" />
   </component>
   <component name="RecentsManager">
@@ -176,7 +197,14 @@
       <workItem from="1567617064422" duration="870000" />
       <workItem from="1567694564508" duration="1867000" />
       <workItem from="1567696648905" duration="6153000" />
-      <workItem from="1567792115269" duration="434000" />
+      <workItem from="1567792115269" duration="444000" />
+      <workItem from="1567792576969" duration="3473000" />
+      <workItem from="1568048935908" duration="963000" />
+      <workItem from="1568310465928" duration="7052000" />
+      <workItem from="1568493113360" duration="10330000" />
+      <workItem from="1568566306167" duration="65000" />
+      <workItem from="1568566440018" duration="11389000" />
+      <workItem from="1568611960907" duration="730000" />
     </task>
     <task id="LOCAL-00001" summary="Init">
       <created>1563635544749</created>
@@ -290,7 +318,91 @@
       <option name="project" value="LOCAL" />
       <updated>1567792393226</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Image resources">
+      <created>1567792555797</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1567792555797</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Updated with delete method">
+      <created>1567793756595</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1567793756595</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Fields only edited if already allowed, editing happens onchange of field">
+      <created>1568499216914</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1568499216914</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Custom scripts to be included after all other scripts to allow jQuery usage">
+      <created>1568499319614</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1568499319614</updated>
+    </task>
+    <task id="LOCAL-00021" summary="Sample event columns added">
+      <created>1568499338157</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1568499338157</updated>
+    </task>
+    <task id="LOCAL-00022" summary="Normal font updated, event columns styles added">
+      <created>1568499377791</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1568499377791</updated>
+    </task>
+    <task id="LOCAL-00023" summary="Includes hero script to load after DOM content">
+      <created>1568499453313</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1568499453313</updated>
+    </task>
+    <task id="LOCAL-00024" summary="Login errors reported in alert&#10;Navbar login error redirects to login page">
+      <created>1568500855642</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1568500855642</updated>
+    </task>
+    <task id="LOCAL-00025" summary="Logout button only displays if logged in&#10;Updates are now placed in alerts">
+      <created>1568501020939</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1568501020939</updated>
+    </task>
+    <task id="LOCAL-00026" summary="Manage section minor styles added">
+      <created>1568501063575</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1568501063575</updated>
+    </task>
+    <task id="LOCAL-00027" summary="Changed to simple copyright">
+      <created>1568501078646</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1568501078646</updated>
+    </task>
+    <task id="LOCAL-00028" summary="Updated to alert unlike nav script">
+      <created>1568612518880</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1568612518880</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -362,7 +474,18 @@
     <MESSAGE value="Geographical module not yet developed" />
     <MESSAGE value="Now includes styles for login and registration system" />
     <MESSAGE value="Image resources" />
-    <option name="LAST_COMMIT_MESSAGE" value="Image resources" />
+    <MESSAGE value="Updated with delete method" />
+    <MESSAGE value="Fields only edited if already allowed, editing happens onchange of field" />
+    <MESSAGE value="Custom scripts to be included after all other scripts to allow jQuery usage" />
+    <MESSAGE value="Sample event columns added" />
+    <MESSAGE value="Normal font updated, event columns styles added" />
+    <MESSAGE value="Includes hero script to load after DOM content" />
+    <MESSAGE value="Login errors reported in alert&#10;Navbar login error redirects to login page" />
+    <MESSAGE value="Logout button only displays if logged in&#10;Updates are now placed in alerts" />
+    <MESSAGE value="Manage section minor styles added" />
+    <MESSAGE value="Changed to simple copyright" />
+    <MESSAGE value="Updated to alert unlike nav script" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated to alert unlike nav script" />
   </component>
   <component name="masterDetails">
     <states>

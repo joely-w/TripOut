@@ -9,7 +9,11 @@ include('../header.php'); ?>
         <li id="slider" class="visible"> <!-- Static visible slide -->
             <img alt="Login to TripOut" src="/images/login.jpg">
             <div class='login' id="login">
-                <?php if (isset($_SESSION['Username'])) {#If user is logged in then greet?>
+                <?php if (isset($_GET['failed'])){
+                echo"<div class='alert alert-danger' role='alert'>Login failed! Please try again</div>";
+
+                }
+                if (isset($_SESSION['Username'])) {#If user is logged in then greet?>
                     <h1 id="register">Hi there <?php echo $_SESSION['Fullname']; ?>!</h1>
 
                 <? } else { #If not logged in, show login form

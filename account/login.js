@@ -11,12 +11,12 @@ $(document).ready(function () {
                 if (jsonData.success === 1) {
                     location.reload(); /*Reload page to load user info*/
                 } else {
-                        window.location.href = "/account/login.php";
+                        window.location.href = "/account/login.php?failed";
                 }
             }
         });
     });
-    $('#loginForm').submit(function (e) { /*For actual login form page*/
+    $('#otherLogin').submit(function (e) { /*For actual login form page*/
         e.preventDefault();
         $.ajax({
             type: "POST",

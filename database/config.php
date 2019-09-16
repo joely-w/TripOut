@@ -79,7 +79,7 @@ class CRUD extends Database
     }
 }
 
-class UserDB extends CRUD #Class specifically used for user accounts
+class UserDB extends CRUD #Class for creation and validation of user accounts
 {
     public $errors = [];
 
@@ -137,30 +137,62 @@ class Login extends CRUD
             session_start();
         }
     }
-    public function DeleteAccount($username){
+
+    public function DeleteAccount($username)
+    {
         $query = "DELETE FROM Users WHERE Username='$username'";
     }
+
     public function AccountFields()
     { #Returns array of editable fields
         return $this->getData("SELECT UserField,Datatype,Viewable FROM LinkedEditable WHERE Editable=1"); #Return each field name along with whether they are editable in an array
     }
 
-    public function UpdateField($field)
-    { #Push field changes to database, $_SESSION key's should be identical to field names
-        $value = $this->Escape($_SESSION[$field]); #Escape values being used in queries
+    public function SaveSession($field, $value)
+    {
+        $value = $this->Escape($value); #Escape values before saving to session
         $field = $this->Escape($field);
+        $_SESSION[$field] = $value;
+        if ($this->UpdateField($field)) {
+            return true;
+        }
+
+    }
+
+    private function UpdateField($field)
+    { #Push field changes to database, $_SESSION key's should be identical to field names
+        if ($field == "Password") {
+            $_SESSION['Password'] = md5($_SESSION['Password']);
+        }
         $query = $this->getData("SELECT Editable FROM LinkedEditable WHERE UserField='$field';");
         if ($query[0] == true) {
-            return ($this->Execute("UPDATE Users SET $field='$value';")); #Insert $_SESSION value into database, return boolean regarding success
+            return ($this->Execute("UPDATE Users SET $field='$_SESSION[$field]';")); #Insert $_SESSION value into database, return boolean regarding success
         } else {
             $this->errors[] = "Field cannot be updated!";
             return false;
         }
     }
+
     public function LoginDevice($data)
     { #Save login details to $_SESSION, thus 'logging in' device
         foreach ($data as $key => $element) {
             $_SESSION[$key] = $element;
         }
+    }
+
+    public function Logout()
+    {
+        session_destroy();
+    }
+}
+
+class myImages extends CRUD
+{
+    public function __construct()
+    {
+        parent::__construct();
+    }
+    public function DisplayImages(){
+        $this->getData("SELECT Filename, Filetype FROM Images WHERE User='".$_SESSION['Username']."';");
     }
 }

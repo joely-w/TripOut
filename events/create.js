@@ -1,3 +1,4 @@
+/**
 var number_of_fields = 0
 function Add(content){
     number_of_fields++;
@@ -12,3 +13,5 @@ function Add(content){
         $('#'+node_id).summernote();
     }
 }
+ Useless until structure code is built
+**/
