@@ -4,18 +4,21 @@ $scripts = array("manage.js");
 include('../header.php');
 include('../database/config.php');
 $account = new Login();
+$Image = new myImages();
 #If a user field does not appear on this page, it probably isn't in the LinkedEditable table, add it!
 ?>
 <body>
 <?php include('../navigation.php'); ?>
-
 <div class="container">
     <div class="row manage">
-        <div id="report"></div> <!--Content updated if error occurs!-->
-
+        <div id="report">
+        </div>
+        <!--Content updated if error occurs!-->
         <?php
         if (isset($_SESSION['Username'])) {
             ?>
+            <h2>My account
+            </h2>
             <?
             $fields = $account->AccountFields();
             foreach ($fields as $field) {
@@ -27,7 +30,8 @@ $account = new Login();
                 ?>
                 <div class="col-md-4">
                     <label>
-                        <?php echo $field['UserField'] ?>:<br>
+                        <?php echo $field['UserField'] ?>:
+                        <br>
                         <input type="<?php echo $field['Datatype'] ?>" name="<?php echo $field['UserField'] ?>"
                                value="<?php echo $valueAttribute ?>"
                                onchange="updateValue('<?php echo $field['UserField'] ?>',this.value)"
@@ -36,18 +40,49 @@ $account = new Login();
                 </div>
                 <?
             } ?>
-            <button type="button" onclick="LogOut()" class="btn btn-primary">Logout</button>
+            <button type="button" onclick="LogOut()" class="btn btn-primary">Logout
+            </button>
+            <h2>My images
+            </h2>
+            <div class="image-upload row">
+                <?php
+                $images_arr = $Image->DisplayImages($_SESSION['Username']);
+                foreach ($images_arr as $image) {#Structure: Filename, Filetype
+                    $path = "/events/images/" . $_SESSION['Username'] . "/" . $image['Filename'] . "." . $image['Filetype'];
+                    ?>
+                    <div class="col-md-2">
+                        <a target="_blank" href="/serve/images.php?image=<?php echo $path ?>"><img class="thumbnail"
+                                                                                                   src="<?php echo $path; ?>"/></a>
+                    </div>
+                    <?
+                }
+                ?>
+            </div>
+            <h2>Upload image</h2>
+            <div class="image-upload row">
+                <form id="uploadimage" action="/images/upload_image_process.php" method="post" enctype="multipart/form-data">
+                    <div id="image_preview"><img id="previewing" height="100" src="https://icon-library.net/images/file-icon-png/file-icon-png-23.jpg" /></div>
+                    <div id="selectImage">
+                        <label>Select Your Image</label><br/>
+                        <input type="file" name="file" id="file" required />
+                        <input type="submit" value="Upload" class="submit" />
+                    </div>
+                </form>
+            </div>
+        <h4 id='loading' >loading..</h4>
+            </div>
+
             <?
         } else {
             ?>
             <div class="alert alert-danger" role="alert">
-                You're not logged in! <a href="login.php">Login now</a>
+                You're not logged in!
+                <a href="login.php">Login now
+                </a>
             </div>
             <?
         }
         ?>
-
     </div>
 </div>
-
 </body>
