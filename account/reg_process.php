@@ -9,7 +9,7 @@ if ($database->NotEmpty($_POST, ["name", "email", "username", "password"])) { #C
     $email = $database->Escape($_POST['email']);
     $password = md5($_POST['password']);
     #Check if email is in correct format and check if email already exists
-    if ($database->Email($email)) {
+    if ($database->Email($email) and !($database->UserExists($username))) {
         $query = "INSERT INTO Users (Username, Password,Email,Fullname,Reputation) VALUES ('$username','$password','$email','$name', 0)";
         $result = $database->Execute($query);#Register user in database
     }
