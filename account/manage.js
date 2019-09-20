@@ -38,3 +38,11 @@ function LogOut() { /*Call the logout method in the API*/
 		}
 	});
 }
+function Modal(path){
+	document.getElementById("modalImage").src=path;
+	document.getElementById("modal").style.display="block";
+}
+function closeModal(){
+	document.getElementById("modal").style.display="none";
+
+}
