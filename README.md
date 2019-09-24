@@ -8,6 +8,9 @@ This project is for OCR A level Computer Science Coursework. If you want to read
 
 https://docs.google.com/document/d/1-S_DqnB8ipWi1Mw2CZCW0NPlL5Vu8c95W82xq1r6vhk/
 
+
+Database structure
+
 | Table name     	| Description                            	|
 |----------------	|----------------------------------------	|
 | Events         	| Stores event information               	|
