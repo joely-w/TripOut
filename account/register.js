@@ -6,6 +6,7 @@ $(document).ready(function () {
             url: '/account/reg_process.php',
             data: $(this).serialize(),
             success: function (response) {
+                console.log(response);
                 var jsonData = JSON.parse(response);
 
                 if (jsonData.success === 1) {
