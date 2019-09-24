@@ -1,4 +1,8 @@
 <?php
+/**
+ * @todo Make image append correct style (as modal is not available)
+ * @body Make the appending of image to My Images directly afer upload work with create page styles, as create page will not have the modal, and needs checkbox styles.
+ */
 $title = "Create Event";
 $styles = array("//stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css");
 $scripts = array("create.js", "/images/upload_handler.js");
