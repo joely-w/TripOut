@@ -1,8 +1,11 @@
 <?php
 /**
- * @todo Create Delete Method
- * @body Create Delete Method in Login Object after database structure has been fully created,so as to ensure cascading is set up properly.
+ * @todo Create Exhaustive Delete Method
+ * @body Create Delete Method in Login Object that cascades through database as well as image folder
+ * @todo Make file upload in object into single transaction
+ * @body Make file upload into single transaction, if database or file upload fails, both fail. Could try executing simultaneously or simply reversion of state
  */
+
 /*Should only be used for API*/
 
 #Parent class for connection to database
@@ -89,6 +92,18 @@ class UserDB extends CRUD #Class for creation and validation of user accounts
         #Run parent constructor, since it is not implicitly done in PHP
     }
 
+    public function UserExists($username)
+    { #Check if username exists in users
+        #Parameter should be escaped before being passed
+        if ($this->getData("SELECT Username from Users WHERE Username='$username'") == []) {
+            return false; #Username does not already exist
+        } else {
+            $this->errors[] = "Username already exists!";
+
+            return true; #Username already exists
+        }
+    }
+
     public function Email($string)
     {
         if ($this->EmailFormat($string)) { #Check if string follows correct email pattern
@@ -138,6 +153,18 @@ class Login extends CRUD
         }
     }
 
+    public function UserExists($username)
+    { #Check if username exists in users
+        #Parameter should be escaped before being passed
+        if ($this->getData("SELECT Username from Users WHERE Username='$username'") == []) {
+            return false; #Username does not already exist
+        } else {
+            $this->errors[] = "Username already exists!";
+
+            return true; #Username already exists
+        }
+    }
+
     public function DeleteAccount($username)
     {
         $query = "DELETE FROM Users WHERE Username='$username'";
@@ -155,6 +182,8 @@ class Login extends CRUD
         $_SESSION[$field] = $value;
         if ($this->UpdateField($field)) {
             return true;
+        } else {
+            return false;
         }
 
     }
@@ -164,12 +193,25 @@ class Login extends CRUD
         if ($field == "Password") {
             $_SESSION['Password'] = md5($_SESSION['Password']);
         }
-        $query = $this->getData("SELECT Editable FROM LinkedEditable WHERE UserField='$field';");
-        if ($query[0] == true) {
-            return ($this->Execute("UPDATE Users SET $field='$_SESSION[$field]';")); #Insert $_SESSION value into database, return boolean regarding success
+        if ($field == "Username") {
+            if (!$this->UserExists($_SESSION['Username'])) { #If new username doesn't already exist in database, apply username update
+                rename("../events/images/" . $_SESSION['OldUsername'], "../events/images/" . $_SESSION['Username']); #Rename users image directory
+                unset($_SESSION['OldUsername']); #Removes backup, because who needs it at this point
+                return ($this->Execute("UPDATE Users SET 'Username'='$_SESSION[$field]';"));
+            } else {
+                $this->errors[] = "Username failed to update";
+                $_SESSION['Username'] = $_SESSION['OldUsername'];
+                return false;
+            }
+
         } else {
-            $this->errors[] = "Field cannot be updated!";
-            return false;
+            $query = $this->getData("SELECT Editable FROM LinkedEditable WHERE UserField='$field';");
+            if ($query[0] == true) {
+                return ($this->Execute("UPDATE Users SET $field='$_SESSION[$field]';")); #Insert $_SESSION value into database, return boolean regarding success
+            } else {
+                $this->errors[] = "Field cannot be updated!";
+                return false;
+            }
         }
     }
 
@@ -191,8 +233,64 @@ class myImages extends CRUD
     public function __construct()
     {
         parent::__construct();
+        if (session_status() == PHP_SESSION_NONE) { #If session has not already been started, start it!
+            session_start();
+        }
     }
-    public function DisplayImages(){
-        $this->getData("SELECT Filename, Filetype FROM Images WHERE User='".$_SESSION['Username']."';");
+
+    private function ImageEntry($filename, $extension, $username)
+    {
+        $query = "INSERT INTO Images(User,Filename,Filetype) VALUES('$username', '$filename','$extension');";
+        if ($this->Execute($query)) {
+            return true;
+        } else {
+            $this->errors[] = "Failed to insert into database";
+        }
+    }
+
+    public function FileExists($filename,$fileextension, $username)
+    {
+        if ($this->getData("SELECT User FROM Images WHERE Filename='$filename' and User='" . $username . "' and Filetype='$fileextension';") == []) { #If record with image on already exists, return true
+            return false;
+        } else {
+            $this->errors[]="File already exists!";
+            return true;
+        }
+
+    }
+
+    private function Validate($file, $username)
+    {
+        $pathparts = pathinfo($file['name']);
+        $MaxFileSize = 10000000; #Currently at 10MB, if changed, must change manage.js file limit as well
+        $ExtensionsAllowed = array("jpeg", "jpg", "png"); #Define file types that will pass the validation
+        $temp = explode(".", $file['name']); #Get file extension by splitting filename into sections, separated by "." and selecting last section
+        $FileExtension = end($temp);
+        if (($file['type'] == "image/png" || $file['type'] == "image/jpg" || $file['type'] == "image/jpeg")
+            && ($file["size"] < $MaxFileSize)
+            && in_array($FileExtension, $ExtensionsAllowed)
+            && $this->FileExists($pathparts['filename'],$pathparts['extension'], $username) == false) { #If file passes format, size checking and has not already been uploaded by user, add to database and return true
+            $this->ImageEntry($pathparts['filename'], $pathparts['extension'], $username);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function UploadImage($file_arr, $username)
+    {
+        if (isset($file_arr["type"]) && $this->Validate($file_arr, $username)) {
+            $sourcePath = $file_arr['tmp_name'];
+            $targetPath = "../events/images/" . $username . "/" . $file_arr['name']; #Directory already created in registration process
+            move_uploaded_file($sourcePath, $targetPath);
+            return [true, $targetPath];
+        } else {
+            return [false, null];
+        }
+    }
+
+    public function DisplayImages($username)
+    {
+        return $this->getData("SELECT Filename, Filetype FROM Images WHERE User='" . $username . "';");
     }
 }
