@@ -387,16 +387,30 @@ input:-webkit-autofill:active { /* Change Autocomplete styles in Chrome*/
 
 .image-upload {
     border: dashed 3px orange;
-    padding:5px;
+    padding: 5px;
 }
 
+#selectImage input[type=file] {
+    visibility: hidden;
+}
+
+.uploader {
+    display: block;
+    font-weight: bold;
+    background-color: white;
+}
+
+.submit {
+    margin: 10px;
+}
 .img-thumb {
-    margin:10px;
+    display: inline-block;
+    margin: 10px;
     position: relative;
     width: 200px;
     height: 200px;
     overflow: hidden;
-    cursor:pointer;
+    cursor: pointer;
 }
 
 .img-thumb img {
@@ -424,15 +438,35 @@ input:-webkit-autofill:active { /* Change Autocomplete styles in Chrome*/
     z-index: 2;
     position: absolute;
     color: white;
-    font-size:30px;
+    font-size: 30px;
     margin: 20px;
     top: 0;
     right: 0
 }
-.modal img{
-    max-width:100%;
-    max-height:100%;
+
+.modal img {
+    max-width: 100%;
+    max-height: 100%;
     position: relative;
     top: 50%;
     transform: translateY(-50%);
+}
+
+/*Image selection styles*/
+
+.img-thumb label:before {
+    background-color: rgba(0, 0, 0, 0.3);
+    content: url("/images/unchecked.png");
+    position: absolute;
+    left: 0;
+    height: 200px;
+    z-index: 3;
+}
+
+.img-thumb :checked + label:before {
+    content: url("/images/checked.png");
+}
+
+.img-thumb input[type=checkbox] {
+    display: none;
 }
