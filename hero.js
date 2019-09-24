@@ -16,7 +16,7 @@ function updateSlide(number) {
 }
 
 function autoUpdate() {
-    updateSlide(int_slide + 1);
+    updateSlide(int_slide + 1); //Used for setInterval
 }
 
 setInterval(autoUpdate, 10000);
