@@ -92,16 +92,56 @@ class UserDB extends CRUD #Class for creation and validation of user accounts
         #Run parent constructor, since it is not implicitly done in PHP
     }
 
-    public function UserExists($username)
+    public function VerifyUser($username, $password)
+    {
+        $username = $this->Escape($username);
+        $password = $this->Escape($password);
+        if ($this->EmailFormat($username)) {
+            if ($this->UserExists($username, "Email")) {
+                $salt = $this->getData("SELECT Salt FROM Users WHERE Email='$username';");
+                $query = "SELECT * FROM Users WHERE Email='$username' AND Password='" . md5($password . $salt) . "';";
+                $result = $this->getData($query)[0]; #Since only one user will exist with that email (see validation in 'reg_process.php'), get first result in array
+            } else {
+                $this->errors[] = "Username/Password incorrect!";
+                return False;
+            }
+        } else {
+            if ($this->UserExists($username, "Username")) {
+                $salt = $this->getData("SELECT Salt FROM Users WHERE Username='$username';")[0]['Salt'];
+                $query = "SELECT * FROM Users WHERE Username='$username' AND Password='" . md5($password . $salt) . "';";#Using Email or Username not redundant since salt is random and so could be identical
+                $result = $this->getData($query)[0];#Since only one user will exist with that email or username (see validation in 'reg_process.php'), get first result in array
+            } else {
+                $this->errors[] = "Username/Password incorrect! " . $username;
+                return False;
+            }
+        }
+        if ($result != []) { #If there is a result, log in user and report success
+            $login = new Login();
+            $login->LoginDevice($result); #Login device using details given by array
+            return True;
+        }
+        $this->errors[] = "Username/Password incorrect!";
+        return False; #No condition needed as implicit
+    }
+
+    public function UserExists($value, $identifier)
     { #Check if username exists in users
         #Parameter should be escaped before being passed
-        if ($this->getData("SELECT Username from Users WHERE Username='$username'") == []) {
+        if ($this->getData("SELECT Username from Users WHERE $identifier='$value'") == []) {
             return false; #Username does not already exist
         } else {
-            $this->errors[] = "Username already exists!";
-
             return true; #Username already exists
         }
+    }
+
+    public function GenerateSalt()
+    {
+        $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcedfghijklmnopqrstuvwxyz0123456789!"£$%^&*()[];:@#~<>,.?/`¬¦|'; #String with all characters that could be included in salt
+        $salt = "";
+        for ($index = 0; $index < 6; $index++) { #Generate random string from characters given, of length 6
+            $salt .= $characters[mt_rand(0, strlen($characters) - 1)];
+        }
+        return $salt;
     }
 
     public function Email($string)
@@ -240,7 +280,8 @@ class myImages extends CRUD
 
     private function ImageEntry($filename, $extension, $username)
     {
-        $query = "INSERT INTO Images(User,Filename,Filetype) VALUES('$username', '$filename','$extension');";
+        $fileID = md5($username . $filename . $extension);
+        $query = "INSERT INTO Images(User,Filename,Filetype, FileID) VALUES('$username', '$filename','$extension', '$fileID');";
         if ($this->Execute($query)) {
             return true;
         } else {
@@ -248,12 +289,12 @@ class myImages extends CRUD
         }
     }
 
-    public function FileExists($filename,$fileextension, $username)
+    public function FileExists($filename, $fileextension, $username)
     {
         if ($this->getData("SELECT User FROM Images WHERE Filename='$filename' and User='" . $username . "' and Filetype='$fileextension';") == []) { #If record with image on already exists, return true
             return false;
         } else {
-            $this->errors[]="File already exists!";
+            $this->errors[] = "File already exists!";
             return true;
         }
 
@@ -269,7 +310,7 @@ class myImages extends CRUD
         if (($file['type'] == "image/png" || $file['type'] == "image/jpg" || $file['type'] == "image/jpeg")
             && ($file["size"] < $MaxFileSize)
             && in_array($FileExtension, $ExtensionsAllowed)
-            && $this->FileExists($pathparts['filename'],$pathparts['extension'], $username) == false) { #If file passes format, size checking and has not already been uploaded by user, add to database and return true
+            && $this->FileExists($pathparts['filename'], $pathparts['extension'], $username) == false) { #If file passes format, size checking and has not already been uploaded by user, add to database and return true
             $this->ImageEntry($pathparts['filename'], $pathparts['extension'], $username);
             return true;
         } else {
@@ -291,6 +332,41 @@ class myImages extends CRUD
 
     public function DisplayImages($username)
     {
-        return $this->getData("SELECT Filename, Filetype FROM Images WHERE User='" . $username . "';");
+        return $this->getData("SELECT Filename, Filetype, FileID FROM Images WHERE User='" . $username . "';");
+    }
+}
+
+class Events extends CRUD
+{
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+    private function getTags($string)
+    { #Return a list of all the tags in a string
+        preg_match_all('~<(.*?)>~', $string, $output);
+        return $output[0];
+    }
+
+    private $supported_tags = ["h1", "h2", "h3", "h4", "h5", "span", "p", "b"];
+
+    public function checkTags($string)
+    {
+        $tags = $this->getTags($string);
+
+        foreach ($tags as $tag) {
+            $result = preg_replace('/[<>]/s', '', $tag);
+            echo $result . "<br>";
+            if (in_array($tag, $this->supported_tags)) {
+                echo "Stop trying to insert $tag tags you scumbag";
+            }
+
+        }
+    }
+
+    public function processImages($list)
+    {
+
     }
 }
