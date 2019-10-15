@@ -1,21 +1,28 @@
 /*Fonts*/
+
 @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,900|Yantramanav&display=swap');
 /*Universal styles*/
+
 body {
     overflow-x: hidden;
 }
 
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
     font-family: 'Source Sans Pro', sans-serif;
     font-weight: 900;
 }
 
-span, p {
+span,
+p {
     font-family: 'Yantramanav', sans-serif;
     font-size: 18px;
 }
 
 /*Navigation Bar*/
+
 .navbar {
     margin-bottom: 0;
 }
@@ -44,14 +51,17 @@ span, p {
     border-radius: 10px !important;
     -webkit-box-shadow: 10px 10px 15px -8px rgba(254, 170, 0, 0.42);
     -moz-box-shadow: 10px 10px 15px -8px rgba(254, 170, 0, 0.42);
-    box-shadow: 10px 10px 15px -8px rgba(254, 170, 0, 0.42); /*Uses rgba as opacity needs to be set, which hex does not support*/
+    box-shadow: 10px 10px 15px -8px rgba(254, 170, 0, 0.42);
+    /*Uses rgba as opacity needs to be set, which hex does not support*/
 }
 
 .dropdown-menu h3 {
-    margin: 0; /*Default header has margins, which are not needed*/
+    margin: 0;
+    /*Default header has margins, which are not needed*/
 }
 
-.dropdown-menu input { /*Style the fields to suite dropdown theme*/
+.dropdown-menu input {
+    /*Style the fields to suite dropdown theme*/
     text-align: center;
     margin: 10px 0;
     background-color: white;
@@ -90,19 +100,22 @@ span, p {
 }
 
 .hero .prev .arrow-left {
-    height: 20px; /*Make div into small box*/
+    height: 20px;
+    /*Make div into small box*/
     width: 20px;
-    border-top: 5px solid #fff; /*Make a white corner*/
+    border-top: 5px solid #fff;
+    /*Make a white corner*/
     border-right: 5px solid #fff;
-    position: absolute; /*Place the arrow in correct position*/
+    position: absolute;
+    /*Place the arrow in correct position*/
     top: 50%;
     left: 50%;
     -webkit-transform: translate(-20%, -50%) rotate(225deg);
     -ms-transform: translate(-20%, -50%) rotate(225deg);
     -o-transform: translate(-20%, -50%) rotate(225deg);
-    transform: translate(-20%, -50%) rotate(225deg); /* Rotate div to create an arrow and move back into place*/
+    transform: translate(-20%, -50%) rotate(225deg);
+    /* Rotate div to create an arrow and move back into place*/
 }
-
 
 .hero .next .arrow-right {
     height: 20px;
@@ -158,14 +171,18 @@ span, p {
 
 /*Login and Registration Form*/
 
-.reg, .login {
+.reg,
+.login {
     max-width: 20%;
     position: absolute;
     top: 5%;
     left: 40%;
 }
 
-.login input[type="text"], .login input[type="password"], .reg input[type="text"], .reg input[type="password"] {
+.login input[type="text"],
+.login input[type="password"],
+.reg input[type="text"],
+.reg input[type="password"] {
     text-align: center;
     width: 350px;
     padding: 20px 0;
@@ -180,15 +197,18 @@ span, p {
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
-input:-webkit-autofill:active { /* Change Autocomplete styles in Chrome*/
+input:-webkit-autofill:active {
+    /* Change Autocomplete styles in Chrome*/
     transition: background-color 5000s ease-in-out 0s;
 }
 
-.login input[type=checkbox], .reg input[type=checkbox] {
+.login input[type=checkbox],
+.reg input[type=checkbox] {
     display: none;
 }
 
-.reg label, .login label {
+.reg label,
+.login label {
     display: block;
     position: absolute;
     margin-right: 10px;
@@ -206,7 +226,8 @@ input:-webkit-autofill:active { /* Change Autocomplete styles in Chrome*/
     background: #435160;
 }
 
-.reg input[type="submit"], .login input[type="submit"] {
+.reg input[type="submit"],
+.login input[type="submit"] {
     background: #1FCE6D;
     border: 0;
     width: 350px;
@@ -218,12 +239,14 @@ input:-webkit-autofill:active { /* Change Autocomplete styles in Chrome*/
     transition: background 0.3s ease-in-out;
 }
 
-.login input[type="submit"]:hover, .reg input[type="submit"]:hover {
+.login input[type="submit"]:hover,
+.reg input[type="submit"]:hover {
     background: #16aa56;
     animation-name: shake;
 }
 
-.reg .forgot, .login .forgot {
+.reg .forgot,
+.login .forgot {
     margin-top: 30px;
     display: block;
     font-size: 13px;
@@ -232,7 +255,8 @@ input:-webkit-autofill:active { /* Change Autocomplete styles in Chrome*/
     color: white;
 }
 
-.reg .forgot:hover, .login .forgot:hover {
+.reg .forgot:hover,
+.login .forgot:hover {
     margin-top: 30px;
     display: block;
     text-align: center;
@@ -240,7 +264,8 @@ input:-webkit-autofill:active { /* Change Autocomplete styles in Chrome*/
     color: #feaa00;
 }
 
-.reg .agree, .login .agree {
+.reg .agree,
+.login .agree {
     padding: 30px 0;
     font-size: 12px;
     text-indent: 25px;
@@ -263,13 +288,21 @@ input:-webkit-autofill:active { /* Change Autocomplete styles in Chrome*/
 }
 
 @keyframes shake {
-    0%, 100% {
+    0%,
+    100% {
         transform: translateX(0);
     }
-    10%, 30%, 50%, 70%, 90% {
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
         transform: translateX(-10px);
     }
-    20%, 40%, 60%, 80% {
+    20%,
+    40%,
+    60%,
+    80% {
         transform: translateX(10px);
     }
 }
@@ -288,21 +321,26 @@ input:-webkit-autofill:active { /* Change Autocomplete styles in Chrome*/
 }
 
 /*Style for events*/
+
 .create {
     text-align: center;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .events h1 {
     margin: 40px;
-
 }
 
-.event-thumb { /*Thumbnail events*/
+.event-thumb {
+    /*Thumbnail events*/
     text-align: center;
 }
 
 .event-thumb img {
-    width: 100%; /*Make image fit thumb box*/
+    width: 100%;
+    /*Make image fit thumb box*/
 }
 
 .content {
@@ -310,7 +348,6 @@ input:-webkit-autofill:active { /* Change Autocomplete styles in Chrome*/
     width: 75%;
     margin-left: auto;
     margin-right: auto;
-
 }
 
 .content input {
@@ -318,8 +355,16 @@ input:-webkit-autofill:active { /* Change Autocomplete styles in Chrome*/
     margin: 10px 0;
 }
 
+.sidebar {
+    display: inline-block;
+    width: 5%;
+    margin: 0;
+}
+
 .toolbar {
     display: grid;
+    width: 100%;
+    float: right;
     grid-template-columns: repeat(auto-fit, minmax(20px, 40px));
     background-color: rgb(231, 231, 231);
     color: rgb(0, 0, 0);
@@ -340,18 +385,15 @@ input:-webkit-autofill:active { /* Change Autocomplete styles in Chrome*/
 .tool-items:hover {
     box-shadow: none;
     background-color: #6b5e5e;
-
 }
 
 .editor {
-    width: 70vw;
-    height: 50vh;
-    margin: 2rem;
-    padding: 1rem;
-    font-size: 1.2rem;
-    box-shadow: 0 .1rem .4rem black;
-    border: 1px solid black;
+    display: inline-block;
+    width: 90%;
+    height: 35%;
+    border-bottom: 1px solid black;
     overflow-y: auto;
+    margin-bottom: 10px;
 }
 
 .getcontent {
@@ -365,7 +407,6 @@ input:-webkit-autofill:active { /* Change Autocomplete styles in Chrome*/
     box-shadow: .1rem .1rem .5rem rgb(255, 255, 255);
     border: 1px solid rgb(0, 0, 0);
 }
-
 
 .toolbox {
     text-align: center;
@@ -403,6 +444,7 @@ input:-webkit-autofill:active { /* Change Autocomplete styles in Chrome*/
 .submit {
     margin: 10px;
 }
+
 .img-thumb {
     display: inline-block;
     margin: 10px;
@@ -424,8 +466,8 @@ input:-webkit-autofill:active { /* Change Autocomplete styles in Chrome*/
     transform: translate(-50%, -50%);
 }
 
-
 /*Modal and content*/
+
 .modal {
     display: none;
     z-index: 2;
@@ -469,4 +511,12 @@ input:-webkit-autofill:active { /* Change Autocomplete styles in Chrome*/
 
 .img-thumb input[type=checkbox] {
     display: none;
+}
+
+.center {
+    text-align: center;
+}
+
+.create-title {
+    text-decoration: underline;
 }
