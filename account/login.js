@@ -6,12 +6,13 @@ $(document).ready(function () {
             url: '/account/login_process.php',
             data: $(this).serialize(),
             success: function (response) {
+                console.log(response);
                 var jsonData = JSON.parse(response);
 
                 if (jsonData.success === 1) {
                     location.reload(); /*Reload page to load user info*/
                 } else {
-                        window.location.href = "/account/login.php?failed";
+                    window.location.href = "/account/login.php?failed";
                 }
             }
         });
@@ -23,12 +24,13 @@ $(document).ready(function () {
             url: '/account/login_process.php',
             data: $(this).serialize(),
             success: function (response) {
+                console.log(response);
                 var jsonData = JSON.parse(response);
 
                 if (jsonData.success === 1) {
                     location.reload(); /*Reload page to load user info*/
                 } else {
-                    $("#errorfield").html("<div class='alert alert-danger' role='alert'>"+jsonData.errors+"</div>");
+                    $("#errorfield").html("<div class='alert alert-danger' role='alert'>" + jsonData.errors + "</div>");
                 }
             }
         });
