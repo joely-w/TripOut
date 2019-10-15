@@ -52,5 +52,7 @@ include('header.php'); ?>
     </div>
 
 </div>
-<?php include('footer.php'); ?>
+<?php
+$scripts = array("hero.js");
+include('footer.php'); ?>
 </body>
