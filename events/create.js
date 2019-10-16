@@ -100,7 +100,7 @@ function processForm() {
     $.ajax({
         url: "/events/create_process.php",
         type: "POST",
-        data: {content: contentFields},
+        data: {eventTitle: document.getElementById("title").value, content: contentFields},
         success: function (response) {
             console.log(response);
         },
