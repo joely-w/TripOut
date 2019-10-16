@@ -343,30 +343,37 @@ class Events extends CRUD
         parent::__construct();
     }
 
-    private function getTags($string)
-    { #Return a list of all the tags in a string
-        preg_match_all('~<(.*?)>~', $string, $output);
-        return $output[0];
+    private $supported_tags = ["html", "body", "h1", "h2", "h3", "h4", "h5", "span", "p", "b"];
+
+    public function addContent($id, $datatype, $content, $position)
+    {
+        $content = $this->Escape($content);
+        return $this->Execute("INSERT INTO EventContent(EventID, ContentOrder, Datatype, Content) VALUES('$id',$position, '$datatype','$content')");
+
     }
 
-    private $supported_tags = ["h1", "h2", "h3", "h4", "h5", "span", "p", "b"];
-
-    public function checkTags($string)
+    public function eventCreate($title, $username) #Create event in table, return id on success or false on failure.
     {
-        $tags = $this->getTags($string);
-
-        foreach ($tags as $tag) {
-            $result = preg_replace('/[<>]/s', '', $tag);
-            echo $result . "<br>";
-            if (in_array($tag, $this->supported_tags)) {
-                echo "Stop trying to insert $tag tags you scumbag";
-            }
-
+        $id = uniqid();
+        $title = $this->Escape($title); #Username loaded from database, already escaped
+        if ($this->Execute("INSERT INTO Events(Title,ID,User) VALUES('$title','$id','$username')")) {
+            return $id;
+        } else {
+            return false;
         }
+
     }
 
-    public function processImages($list)
+    public function checkTags($string) #Check to see if all tags in content are in the HTML whitelist
     {
-
+        $DOM = new DOMDocument();
+        $DOM->loadHTML($string);
+        foreach ($DOM->getElementsByTagName('*') as $element) { #Compare each element tag to $supported_tags
+            if (!in_array($element->tagName, $this->supported_tags)) {
+                echo false;
+                return false;
+            }
+        }
+        return true;
     }
 }
