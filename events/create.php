@@ -7,7 +7,8 @@ $title = "Create Event";
 $styles = array("//stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css");
 $scripts = array("/images/upload_handler.js");
 include('../database/config.php');
-include('../header.php'); ?>
+include('../header.php');
+?>
 
     <body>
     <?php
@@ -24,7 +25,7 @@ include('../header.php'); ?>
                 <button class="btn btn-primary" type="button" onclick="Add('image')">Add image</button>
             </div>
             <div id="content" class="content">
-                <input class="form-control" type="text" name="title" placeholder="Event Title"/>
+                <input class="form-control" id="title" type="text" name="title" placeholder="Event Title"/>
 
                 <div id="usercontent"><!-- All content will be appended to this div--></div>
                 <button>
