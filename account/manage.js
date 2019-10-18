@@ -1,6 +1,5 @@
 function updateValue(field, value) { /*Call the update method in the API*/
-    console.log(field, value);
-    data = ["update", field, value];
+    let data = ["update", field, value];
     $.ajax({
         type: "POST",
         url: '/account/manage_process.php',
