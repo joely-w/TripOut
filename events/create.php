@@ -15,7 +15,6 @@ include('../header.php');
     $Image = new myImages();
     include('../navigation.php'); ?>
     <div class="center create-title">
-        <h1>Create an event</h1>
     </div>
     <div class="create">
         <form method="post" id="event_form" action="create_process.php">
@@ -25,10 +24,11 @@ include('../header.php');
                 <button class="btn btn-primary" type="button" onclick="Add('image')">Add image</button>
             </div>
             <div id="content" class="content">
+                <h1>Create an event</h1>
                 <input class="form-control" id="title" type="text" name="title" placeholder="Event Title"/>
 
                 <div id="usercontent"><!-- All content will be appended to this div--></div>
-                <button>
+                <button class="center btn btn-primary">
                     Submit
                 </button>
         </form>
@@ -36,5 +36,5 @@ include('../header.php');
     </div>
     </body>
 <?php
-$scripts = array("create.js");
+$scripts_footer = array("create.js");
 include('/var/www/html/footer.php'); ?>
