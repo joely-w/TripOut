@@ -13,7 +13,7 @@
             <div class="collapse navbar-collapse" id="navbar-primary-collapse">
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="/">Home</a></li>
-                    <li><a href="#">Browse</a></li>
+                    <li><a href="/events/browse.php">Browse</a></li>
                     <li><a href="/"><img id="logo-navbar-middle" src="/images/logo.png" width="200" alt="Trip Out Logo"></a>
                     </li>
                     <li><a href="/events/create.php">Create</a></li>
