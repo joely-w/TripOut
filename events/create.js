@@ -26,8 +26,8 @@ function ImageAppender(array_index, data_value) {
 
 function Add(content) {
     if (content === "image") {
-        let container = document.createElement("div");
-        // noinspection JSValidateTypes
+        var container = document.createElement("div");
+        container.className = "content-el";
         container.id = number_of_fields;
         container.className = "image-upload select-image row";
         $.ajax({
@@ -40,8 +40,6 @@ function Add(content) {
                     imgcont.className = "cold-md-2 img-thumb";
                     imgcont.innerHTML = `<input type="checkbox" onchange="ImageAppender(number_of_fields-1, this.value)" value="${result[i][1]}" id="cont${number_of_fields}${i}"><label for="cont${number_of_fields}${i}"><img src="${result[i][0]}"></label>`;
                     container.appendChild(imgcont);
-                    let ContentDiv = document.getElementById("usercontent");
-                    ContentDiv.parentNode.insertBefore(container, ContentDiv.nextSibling);
                 }
             }
         });
@@ -49,13 +47,14 @@ function Add(content) {
     }
     if (content === "text") {
         /*Create sidebar for editing text*/
-        let container = document.createElement("div");
+        var container = document.createElement("div");
+        container.className = "content-el";
         // noinspection JSValidateTypes
         container.id = number_of_fields;
 
-        var sidebar = document.createElement("div");
+        let sidebar = document.createElement("div");
         sidebar.className = "sidebar";
-        var toolbar = document.createElement("div");
+        let toolbar = document.createElement("div");
         toolbar.className = "toolbar";
         for (let i = 0; i < toolbar_elements.length; i++) {
             /*Loop through toolbar elements and create each button in toolbar*/
@@ -75,15 +74,16 @@ function Add(content) {
         Editor.innerHTML = '<h1>Here\'s some content!</h1><p>Put some words here to talk about your event!</p>';
         Editor.className = "editor";
         Editor.id = `Text` + number_of_fields;
-        let ContentDiv = document.getElementById("usercontent");
         /*Append Sidebar and Editor to DOM*/
         container.appendChild(Editor);
         container.appendChild(sidebar);
-        ContentDiv.parentNode.insertBefore(container, ContentDiv.nextSibling);
         contentFields.push({dataType: 'text', dataSrc: 'Text' + number_of_fields});
     }
     number_of_fields++;
-
+    $("#usercontent").append(($(container)
+            .hide()
+            .fadeIn(500)
+    ));
 }
 
 $("#event_form").submit(function (e) {
@@ -101,8 +101,8 @@ function processForm() {
         url: "/events/create_process.php",
         type: "POST",
         data: {eventTitle: document.getElementById("title").value, content: contentFields},
-        success: function (response) {
-            console.log(response);
+        success: function () {
+            $("#event_form").innerHTML = "<h1>Form has been submitted!</h1>";
         },
 
     });
