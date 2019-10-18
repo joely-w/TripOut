@@ -377,3 +377,34 @@ class Events extends CRUD
         return true;
     }
 }
+
+class Featured extends CRUD
+{
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+    public function allEvents()
+    {
+        return $this->getData("SELECT ID FROM Events;");
+    }
+
+    public function eventSnippet($id)
+    {
+        $id = $this->Escape($id);
+        $description = $this->getData("SELECT Content FROM EventContent WHERE EventID='$id' AND Datatype='text' ORDER BY ContentOrder ASC LIMIT 1;")[0]['Content'];
+        $title = $this->getData("SELECT Title FROM Events WHERE ID='$id';")[0]['Title'];
+        return ["description" => substr(strip_tags($description), 0, 220) . "...", "thumbnail" => $this->eventThumb($id), "title" => $title];
+    }
+
+    public function eventThumb($id)
+    {
+        $username = $this->getData("SELECT User FROM Events WHERE ID='" . $id . "'")[0]['User'];
+        $thumbnail_id = $this->getData("SELECT Content FROM EventContent WHERE Datatype='image' AND EventID='$id' ORDER BY RAND() LIMIT 1;")[0]['Content'];
+        $image_result = $this->getData("SELECT Filename, Filetype FROM Images WHERE User='$username' AND FileID='$thumbnail_id'")[0];
+        $thumbnail_src = "/events/images/$username/" . $image_result['Filename'] . "." . $image_result['Filetype'];
+        return $thumbnail_src;
+    }
+
+}
