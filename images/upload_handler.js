@@ -10,9 +10,9 @@ $(document).ready(function(e) {
 			processData: false,
 			success: function(response) { /*Add image to div so user does not have to reload page and alert of success*/
 				console.log(response);
-				var jsonData = JSON.parse(response);
-				if (jsonData.success == 1) {
-					var content = `<div class="col-md-2 img-thumb"><a onclick="Modal('${jsonData.Filepath}')"><img src="${jsonData.Filepath}"></a></div>`;
+				const jsonData = JSON.parse(response);
+				if (jsonData.success === 1) {
+					const content = `<div class="col-md-2 img-thumb"><a onclick="Modal('${jsonData.Filepath}')"><img src="${jsonData.Filepath}"></a></div>`;
 					$("#images").append(content);
 					$("#image-upload").append("<div class='alert alert-success' role='alert'> Image has been added!</div>");
 
@@ -28,7 +28,7 @@ $(document).ready(function(e) {
 });
 
 function fileHandler(arg) {
-	var file = arg.files[0]
+	var file = arg.files[0];
 	var mime_types = ['image/jpeg', 'image/png'];
 	if (mime_types.indexOf(file.type) == -1) {
 		$("#image-upload").append("<div class='alert alert-error' role='alert'>That's not an image!</div>");
