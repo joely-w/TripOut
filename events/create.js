@@ -101,8 +101,9 @@ function processForm() {
         url: "/events/create_process.php",
         type: "POST",
         data: {eventTitle: document.getElementById("title").value, content: contentFields},
-        success: function () {
-            $("#event_form").innerHTML = "<h1>Form has been submitted!</h1>";
+        success: function (response) {
+            console.log(response);
+            $('#create').innerHTML = '<h1>Form has been submitted!</h1>';
         },
 
     });
