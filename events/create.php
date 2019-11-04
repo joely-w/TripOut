@@ -10,13 +10,16 @@ include('../database/config.php');
 include('../header.php');
 ?>
 
-    <body>
-    <?php
+<body>
+<?php
+include('../navigation.php');
+if (isset($_SESSION['Username'])) {
+
     $Image = new myImages();
-    include('../navigation.php'); ?>
-    <div class="center create-title">
+    ?>
+    <div id="alert_box" class="center create-title">
     </div>
-    <div class="create">
+    <div id="create" class="create">
         <form method="post" id="event_form" action="create_process.php">
 
             <div class="toolbox"><span>What content do you want to add?</span>
@@ -34,7 +37,15 @@ include('../header.php');
         </form>
     </div>
     </div>
-    </body>
-<?php
+<? } else {
+    ?>
+    <div class="manage alert alert-danger" role="alert">
+        You're not logged in!
+        <a href="/account/login.php">Login now
+        </a>
+    </div>
+    <?php
+}
 $scripts_footer = array("create.js");
 include('/var/www/html/footer.php'); ?>
+</body>
