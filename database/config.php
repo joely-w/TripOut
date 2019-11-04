@@ -107,8 +107,8 @@ class UserDB extends CRUD #Class for creation and validation of user accounts
             }
         } else {
             if ($this->UserExists($username, "Username")) {
-                $salt = $this->getData("SELECT Salt FROM Users WHERE Username='$username';")[0]['Salt'];
-                $query = "SELECT * FROM Users WHERE Username='$username' AND Password='" . md5($password . $salt) . "';";#Using Email or Username not redundant since salt is random and so could be identical
+                $salt = $this->getData("SELECT Salt FROM Users WHERE Username='" . $username . "';")[0]['Salt'];
+                $query = "SELECT * FROM Users WHERE Username='" . $username . "' AND Password='" . md5($password . $salt) . "';";#Using Email or Username not redundant since salt is random and so could be identical
                 $result = $this->getData($query)[0];#Since only one user will exist with that email or username (see validation in 'reg_process.php'), get first result in array
             } else {
                 $this->errors[] = "Username/Password incorrect! " . $username;
@@ -122,6 +122,15 @@ class UserDB extends CRUD #Class for creation and validation of user accounts
         }
         $this->errors[] = "Username/Password incorrect!";
         return False; #No condition needed as implicit
+    }
+
+    public function EmailFormat($string)
+    {
+        if (preg_match("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$^", $string)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function UserExists($value, $identifier)
@@ -160,15 +169,6 @@ class UserDB extends CRUD #Class for creation and validation of user accounts
         }
     }
 
-    public function EmailFormat($string)
-    {
-        if (preg_match("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$^", $string)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     public function NotEmpty($data, $desired)
     { #Check if each element in desired is in data and is not empty, since no empty elements should be in desired, emptiness checks are implicit
         foreach ($desired as $item) {
@@ -190,18 +190,6 @@ class Login extends CRUD
         parent::__construct();
         if (session_status() == PHP_SESSION_NONE) { #If session has not already been started, start it!
             session_start();
-        }
-    }
-
-    public function UserExists($username)
-    { #Check if username exists in users
-        #Parameter should be escaped before being passed
-        if ($this->getData("SELECT Username from Users WHERE Username='$username'") == []) {
-            return false; #Username does not already exist
-        } else {
-            $this->errors[] = "Username already exists!";
-
-            return true; #Username already exists
         }
     }
 
@@ -247,11 +235,23 @@ class Login extends CRUD
         } else {
             $query = $this->getData("SELECT Editable FROM LinkedEditable WHERE UserField='$field';");
             if ($query[0] == true) {
-                return ($this->Execute("UPDATE Users SET $field='$_SESSION[$field]';")); #Insert $_SESSION value into database, return boolean regarding success
+                return ($this->Execute("UPDATE Users SET $field='$_SESSION[$field]' WHERE Username='" . $this->Escape($_SESSION['Username']) . "';")); #Insert $_SESSION value into database, return boolean regarding success
             } else {
                 $this->errors[] = "Field cannot be updated!";
                 return false;
             }
+        }
+    }
+
+    public function UserExists($username)
+    { #Check if username exists in users
+        #Parameter should be escaped before being passed
+        if ($this->getData("SELECT Username from Users WHERE Username='$username'") == []) {
+            return false; #Username does not already exist
+        } else {
+            $this->errors[] = "Username already exists!";
+
+            return true; #Username already exists
         }
     }
 
@@ -278,26 +278,16 @@ class myImages extends CRUD
         }
     }
 
-    private function ImageEntry($filename, $extension, $username)
+    public function UploadImage($file_arr, $username)
     {
-        $fileID = md5($username . $filename . $extension);
-        $query = "INSERT INTO Images(User,Filename,Filetype, FileID) VALUES('$username', '$filename','$extension', '$fileID');";
-        if ($this->Execute($query)) {
-            return true;
+        if (isset($file_arr["type"]) && $this->Validate($file_arr, $username)) {
+            $sourcePath = $file_arr['tmp_name'];
+            $targetPath = "../events/images/" . $username . "/" . $file_arr['name']; #Directory already created in registration process
+            move_uploaded_file($sourcePath, $targetPath);
+            return [true, $targetPath];
         } else {
-            $this->errors[] = "Failed to insert into database";
+            return [false, null];
         }
-    }
-
-    public function FileExists($filename, $fileextension, $username)
-    {
-        if ($this->getData("SELECT User FROM Images WHERE Filename='$filename' and User='" . $username . "' and Filetype='$fileextension';") == []) { #If record with image on already exists, return true
-            return false;
-        } else {
-            $this->errors[] = "File already exists!";
-            return true;
-        }
-
     }
 
     private function Validate($file, $username)
@@ -318,15 +308,25 @@ class myImages extends CRUD
         }
     }
 
-    public function UploadImage($file_arr, $username)
+    public function FileExists($filename, $fileextension, $username)
     {
-        if (isset($file_arr["type"]) && $this->Validate($file_arr, $username)) {
-            $sourcePath = $file_arr['tmp_name'];
-            $targetPath = "../events/images/" . $username . "/" . $file_arr['name']; #Directory already created in registration process
-            move_uploaded_file($sourcePath, $targetPath);
-            return [true, $targetPath];
+        if ($this->getData("SELECT User FROM Images WHERE Filename='$filename' and User='" . $username . "' and Filetype='$fileextension';") == []) { #If record with image on already exists, return true
+            return false;
         } else {
-            return [false, null];
+            $this->errors[] = "File already exists!";
+            return true;
+        }
+
+    }
+
+    private function ImageEntry($filename, $extension, $username)
+    {
+        $fileID = md5($username . $filename . $extension);
+        $query = "INSERT INTO Images(User,Filename,Filetype, FileID) VALUES('$username', '$filename','$extension', '$fileID');";
+        if ($this->Execute($query)) {
+            return true;
+        } else {
+            $this->errors[] = "Failed to insert into database";
         }
     }
 
@@ -336,14 +336,19 @@ class myImages extends CRUD
     }
 }
 
-class Events extends CRUD
+class addEvent extends CRUD
 {
+    private $supported_tags = ["html", "body", "h1", "h2", "h3", "h4", "h5", "span", "p", "b", "div", "em", "strong", "a", "ul", "li", "ol", "br", "font"];
+
     public function __construct()
     {
         parent::__construct();
     }
 
-    private $supported_tags = ["html", "body", "h1", "h2", "h3", "h4", "h5", "span", "p", "b"];
+    public function listContents()
+    {
+
+    }
 
     public function addContent($id, $datatype, $content, $position)
     {
@@ -370,7 +375,7 @@ class Events extends CRUD
         $DOM->loadHTML($string);
         foreach ($DOM->getElementsByTagName('*') as $element) { #Compare each element tag to $supported_tags
             if (!in_array($element->tagName, $this->supported_tags)) {
-                echo false;
+                echo $element->tagName . "\n";
                 return false;
             }
         }
@@ -378,7 +383,7 @@ class Events extends CRUD
     }
 }
 
-class Featured extends CRUD
+class Event extends CRUD
 {
     public function __construct()
     {
@@ -390,21 +395,49 @@ class Featured extends CRUD
         return $this->getData("SELECT ID FROM Events;");
     }
 
-    public function eventSnippet($id)
+    public function displayEvent($eventID)
     {
-        $id = $this->Escape($id);
-        $description = $this->getData("SELECT Content FROM EventContent WHERE EventID='$id' AND Datatype='text' ORDER BY ContentOrder ASC LIMIT 1;")[0]['Content'];
-        $title = $this->getData("SELECT Title FROM Events WHERE ID='$id';")[0]['Title'];
-        return ["description" => substr(strip_tags($description), 0, 220) . "...", "thumbnail" => $this->eventThumb($id), "title" => $title];
+        $content = $this->getData("SELECT Content, Datatype FROM EventContent WHERE EventID='" . $eventID . "' ORDER BY ContentOrder"); #Returns all content, in ascending order.
+        $presentable_content = []; #Array that will store content in a nice structure that can parsed easily.
+        $presentable_content[] = ["Datatype" => "Title", "Source" => $this->getData("SELECT Title FROM Events WHERE ID='$eventID'")[0]['Title']]; #Add title to array
+        foreach ($content as $item) { #Add
+            if ($item['Datatype'] == "image") {
+                $img_src = $this->getImage($item['Content'], $eventID);
+                $presentable_content[] = ["Datatype" => "Image", "Source" => $img_src];
+            } elseif ($item['Datatype'] == "text") {
+                $presentable_content[] = ["Datatype" => "Text", "Source" => $item['Content']];
+            }
+        }
+        return $presentable_content;
     }
 
-    public function eventThumb($id)
+    public function getImage($imgID, $eventID)
     {
-        $username = $this->getData("SELECT User FROM Events WHERE ID='" . $id . "'")[0]['User'];
-        $thumbnail_id = $this->getData("SELECT Content FROM EventContent WHERE Datatype='image' AND EventID='$id' ORDER BY RAND() LIMIT 1;")[0]['Content'];
-        $image_result = $this->getData("SELECT Filename, Filetype FROM Images WHERE User='$username' AND FileID='$thumbnail_id'")[0];
-        $thumbnail_src = "/events/images/$username/" . $image_result['Filename'] . "." . $image_result['Filetype'];
-        return $thumbnail_src;
+        $username = $this->getData("SELECT User FROM Events WHERE ID='" . $eventID . "'")[0]['User'];
+        $image_result = $this->getData("SELECT Filename, Filetype FROM Images WHERE User='$username' AND FileID='$imgID'")[0];
+        $img_src = "/events/images/$username/" . $image_result['Filename'] . "." . $image_result['Filetype'];
+        return $img_src;
+    }
+}
+
+class Featured extends Event
+{
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+    public function eventSnippet($eventID)
+    {
+        #Returns all information needed to display event as snippet
+        $eventID = $this->Escape($eventID); #Escape eventID to be safe
+        $description = $this->getData("SELECT Content FROM EventContent WHERE EventID='$eventID' AND Datatype='text' ORDER BY ContentOrder ASC LIMIT 1;")[0]['Content']; #Get the first paragraph of the event as the description, will be wrapped later
+        $title = $this->getData("SELECT Title FROM Events WHERE ID='$eventID';")[0]['Title']; #Get title of event
+
+        $random_thumbnail_id = $this->getData("SELECT Content FROM EventContent WHERE Datatype='image' AND EventID='$eventID' ORDER BY RAND() LIMIT 1;")[0]['Content']; #Grab a random image from event
+        $thumbnail_src = $this->getImage($random_thumbnail_id, $eventID);
+        return ["id" => $eventID, "description" => substr(strip_tags($description), 0, 220) . "...", "thumbnail" => $thumbnail_src, "title" => $title];
     }
 
 }
+
