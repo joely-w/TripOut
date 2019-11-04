@@ -7,7 +7,7 @@ $(document).ready(function () {
             data: $(this).serialize(),
             success: function (response) {
                 console.log(response);
-                var jsonData = JSON.parse(response);
+                const jsonData = JSON.parse(response);
 
                 if (jsonData.success === 1) {
                     document.getElementById("login").innerHTML = "<h1 class='header'>Account successfully created!</h1>";
