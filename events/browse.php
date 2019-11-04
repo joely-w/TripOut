@@ -1,5 +1,5 @@
 <?php
-$title = "Home";
+$title = "Browse Events";
 $scripts = array("browse.js");
 include('../header.php'); ?>
 <body>
@@ -8,7 +8,7 @@ include('../header.php'); ?>
     <h1>Browse events</h1>
 
     <div id="events" class="row">
-
+        <!-- Events will be appended dynamically here!-->
     </div>
 
 </div>
