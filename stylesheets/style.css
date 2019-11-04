@@ -1,5 +1,4 @@
 /*Fonts*/
-
 @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,900|Yantramanav&display=swap');
 /*Universal styles*/
 
@@ -177,6 +176,7 @@ p {
     position: absolute;
     top: 5%;
     left: 40%;
+    color: white;
 }
 
 .login input[type="text"],
@@ -188,9 +188,9 @@ p {
     padding: 20px 0;
     background: transparent;
     border: 0;
-    border-bottom: 1px solid #435160;
+    border-bottom: 2px solid white;
     outline: none;
-    color: #6D7781;
+    color: white;
     font-size: 14px;
 }
 
@@ -273,7 +273,7 @@ input:-webkit-autofill:active {
 }
 
 ::-webkit-input-placeholder {
-    color: #435160;
+    color: white;
     font-size: 18px;
 }
 
@@ -329,13 +329,25 @@ input:-webkit-autofill:active {
     margin-right: auto;
 }
 
+.events {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
 .events h1 {
+    text-align: center;
     margin: 40px;
 }
 
 .event-thumb {
     /*Thumbnail events*/
     text-align: center;
+}
+
+.event-thumb a {
+    text-decoration: none;
+    text-underline: none;
+    color: black;
 }
 
 .event-thumb img {
@@ -346,10 +358,48 @@ input:-webkit-autofill:active {
     /*Make image fit thumb box*/
 }
 
+.img-cont {
+    width: 100%;
+    height: 400px;
+    overflow: hidden;
+    text-align: center;
+
+}
+
+.event-image {
+    max-width: 100%;
+    position: relative;
+}
+
+.event-image ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    position: relative;
+    height: 800px;
+    max-width: 100%;
+}
+
+.event-image li {
+    min-width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: 0.6s ease-in-out;
+}
+
+.event-image li img {
+    display: block;
+    width: 100vw;
+    height: 100%;
+}
+
 .content-el {
     transition: 3s;
 
 }
+
 .content {
     display: inline-block;
     width: 75%;
