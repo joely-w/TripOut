@@ -53,6 +53,6 @@ include('header.php'); ?>
 
 </div>
 <?php
-$scripts = array("hero.js");
+$scripts_footer = array("hero.js");
 include('footer.php'); ?>
 </body>
