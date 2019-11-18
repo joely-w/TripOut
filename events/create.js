@@ -86,27 +86,63 @@ function Add(content) {
     ));
 }
 
+function parseLocation() {
+    return {
+        postcode: current_post,
+        line1: $("#line1").val(),
+        line2: $("#line2").val(),
+        county: $("#county").val(),
+        zoom: $("#zoom").val()
+    };
+}
+
 function parseOccurence() {
     let starttime = $("#datetimepicker").data('date');
     let endtime = $("#datetimepicker1").data('date');
-
     if (current_recurrence === "once") {
         let startdate = $('#startdate').data('date');
         let enddate = $('#enddate').data('date');
-        return {type: "once", startdate: startdate, enddate: enddate, starttime: starttime, endtime: endtime}
+        return {
+            type: "once",
+            startdate: startdate,
+            enddate: enddate,
+            starttime: starttime,
+            endtime: endtime
+        }
     } else if (current_recurrence === "daily") {
-        return {type: "daily", starttime: starttime, endtime: endtime}
+        return {
+            type: "daily",
+            starttime: starttime,
+            endtime: endtime
+        }
     } else if (current_recurrence === "weekly") {
         let day = $('#day').val();
-        return {type: "weekly", starttime: starttime, endtime: endtime, day: day}
+        return {
+            type: "weekly",
+            starttime: starttime,
+            endtime: endtime,
+            day: day
+        }
     } else if (current_recurrence === "monthly") {
         let week = $('#week').val();
         let day = $('#day').val();
-        return {type: "monthly", starttime: starttime, endtime: endtime, week: week, day: day}
+        return {
+            type: "monthly",
+            starttime: starttime,
+            endtime: endtime,
+            week: week,
+            day: day
+        }
     } else if (current_recurrence === "yearly") {
         let day = $('#day').val();
         let month = $('#month').val();
-        return {type: "yearly", starttime: starttime, endtime: endtime, day: day, month: month}
+        return {
+            type: "yearly",
+            starttime: starttime,
+            endtime: endtime,
+            day: day,
+            month: month
+        }
     }
 }
 
@@ -118,6 +154,7 @@ function processForm() {
     }
     console.log({
         eventOccurence: parseOccurence(),
+        eventLocation: parseLocation(),
         eventTitle: document.getElementById("title").value,
         content: contentFields
     });
@@ -127,10 +164,12 @@ function processForm() {
         data: {
             eventOccurence: parseOccurence(),
             eventTitle: document.getElementById("title").value,
+            eventLocation: parseLocation(),
             content: contentFields
         },
         success: function (response) {
             console.log(response);
+            $("#content").html("<h1>Event has been created!</h1>")
         },
 
     });
@@ -144,15 +183,16 @@ function postCodeLookup(postcode) {
             url: "https://api.postcodes.io/postcodes/" + postcode,
             type: 'GET',
             success: function (res) {
-                console.log(res);
                 if (res['status'] === 200) {
-                    $("#county").val(res['result']['parish']);
-                    $("#county").prop("disabled", true);
+                    let county = $('#county');
+                    county.val(res['result']['parish']);
+                    county.prop("disabled", true);
                     current_post = postcode;
                     showMap(10, postcode)
                 }
             }
         });
+        $("#zoom").val(10);
     }
 }
 
@@ -164,18 +204,18 @@ function showMap(zoom, mode) {
     let res = "500x300"; //Resolution for map image
     if (mode === "addr") {
         if (current_post.length >= 6 && image_exist === false) {
-            address = encodeURI($("#houseno").val() + $("#streetname").val() + "," + $("#county").val() + "," + current_post);
-            marker = encodeURI("size:mid|color:0xFFFF00|label:C|" + address);
+            address = encodeURI($("#line1").val() + $("#line2").val() + "," + $("#county").val() + "," + current_post);
+            marker = encodeURI("size:mid|color:0xFFFF00|label:Venue|" + address);
             let map_resource = `https://maps.googleapis.com/maps/api/staticmap?center=${address}&size=${res}&key=AIzaSyAqt8ejRfMThaP6C3Kfxcd8fN7OpI5RXUc&zoom=${zoom}&markers=${marker}`;
             $("#map").html(`<img src="${map_resource}" />`);
         }
     } else {
         address = encodeURI(current_post);
-        marker = encodeURI("size:mid|color:0xFFFF00|label:C|" + address);
+        marker = encodeURI("size:mid|color:0xFFFF00|label:Venue|" + address);
         let map_resource = `https://maps.googleapis.com/maps/api/staticmap?center=${address}&size=${res}&key=AIzaSyAqt8ejRfMThaP6C3Kfxcd8fN7OpI5RXUc&zoom=${zoom}&markers=${marker}`;
         $("#map").html(`<img src="${map_resource}" />`);
     }
-
+    $("#zoom").val(zoom);
 }
 
 let current_recurrence;
@@ -210,6 +250,7 @@ $('#recurrence').on('change', function () {
         current_recurrence = "monthly";
         $("#date").html(`<label for="week"><p>Which week in the month the event on?</p></label> <select class="select-css" id="week" name="weeknumber"> <option selected disabled>Select</option> <option value="1">Week 1</option> <option value="2">Week 2</option> <option value="3">Week 3</option> <option value="4">Week 4</option> </select><label for="day"><p>What day in the week is the event?</p></label> <select class="select-css" id="day" name="day"> <option selected disabled>Select</option> <option value="Monday">Monday</option> <option value="Tuesday">Tuesday</option> <option value="Wednesday">Wednesday</option> <option value="Thursday">Thursday</option> <option value="Friday">Friday</option> <option value="Saturday">Saturday</option> <option value="Sunday">Sunday</option> </select>`);
     } else if (this.value === "yearly" && current_recurrence !== "yearly") {
+        current_recurrence = "yearly";
         $("#date").html(`<label>What month does your event happen on?<select class="form-control" id="month"> <option value="January">January</option> <option value="February">February</option> <option value="March">March</option> <option value="April">April</option> <option value="May">May</option> <option value="June">June</option> <option value="July">July</option> <option value="August">August</option> <option value="September">September</option> <option value="October">October</option> <option value="November">November</option> <option value="December">December</option> </select> </label> <label>What day of the month does your event happen on? <input class="form-control" type="number" min="1" max="31" name="day" id="day"/></label>`);
 
     }
