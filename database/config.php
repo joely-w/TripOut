@@ -345,20 +345,60 @@ class addEvent extends CRUD
         parent::__construct();
     }
 
-    public function listContents()
+    public function addLocation($eventID, $address)
     {
+        foreach ($address as $key => $value) {
+            $address[$key] = $this->Escape($value);
+        }
+        $postcode = $address['postcode'];
+        $line1 = $address['line1'];
+        $line2 = $address['line2'];
+        $town = $address['county'];
+        $zoom = $address['zoom'];
+        echo "INSERT INTO Location(Event, PostCode, Line1, Line2, Town, Zoom) VALUES('$eventID', '$postcode','$line1', '$line2', '$town', $zoom )";
+        $this->Execute("INSERT INTO Location(Event, PostCode, Line1, Line2, Town, Zoom) VALUES('$eventID', '$postcode','$line1', '$line2', '$town', $zoom )");
+        #Address array filled with all details required for map}
+    }
+
+    public function addOccurence($eventID, $occurence)
+    {
+        foreach ($occurence as $key => $value) { #Escape all values in array
+            $occurence[$key] = $this->Escape($value);
+        }
+        $eventID = $this->Escape($eventID);
+        $starttime = date("G:i:00", strtotime($occurence['starttime']));
+        $endtime = date("G:i:00", strtotime($occurence['endtime']));
+        $type = $occurence['type'];
+        if ($type == "once") {
+            $startdate = date_format(date_create_from_format("d/m/Y", $occurence['startdate']), "Y-m-d");
+            $enddate = date_format(date_create_from_format("d/m/Y", $occurence['enddate']), "Y-m-d");
+            return $this->Execute("INSERT INTO Occurrence(Type, Event, StartDate, EndDate, StartTime,EndTime) VALUES('Once', '$eventID', '$startdate','$enddate','$starttime', '$endtime')");
+        } elseif ($type == "daily") {
+            return $this->Execute("INSERT INTO Occurrence(Type, Event, StartTime, EndTime) VALUES('Daily', '$eventID','$starttime', '$endtime')");
+        } elseif ($type == 'weekly') {
+            $day = $occurence['day'];
+            return $this->Execute("INSERT INTO Occurrence(Type, Event, StartTime, EndTime, Day) VALUES('Weekly', '$eventID','$starttime', '$endtime', '$day')");
+        } elseif ($type == 'monthly') {
+            $day = $occurence['day'];
+            $week = $occurence['week'];
+            return $this->Execute("INSERT INTO Occurrence(Type, Event, StartTime, EndTime, Day, Week) VALUES('Monthly', '$eventID','$starttime', '$endtime', '$day', '$week')");
+        } elseif ($type == 'yearly') {
+            $day = $occurence['day'];
+            $month = $occurence['month'];
+            echo "INSERT INTO Occurrence(Type, Event, StartTime, EndTime, Day, Month) VALUES('Yearly', '$eventID','$starttime', '$endtime', '$day', '$month')";
+            return $this->Execute("INSERT INTO Occurrence(Type, Event, StartTime, EndTime, Day, Month) VALUES('Yearly', '$eventID','$starttime', '$endtime', '$day', '$month')");
+        }
 
     }
 
     public function addContent($id, $datatype, $content, $position)
-    {
+    { #Add an event content section
         $content = $this->Escape($content);
         return $this->Execute("INSERT INTO EventContent(EventID, ContentOrder, Datatype, Content) VALUES('$id',$position, '$datatype','$content')");
-
     }
 
-    public function eventCreate($title, $username) #Create event in table, return id on success or false on failure.
-    {
+    public function eventCreate($title, $username) #Create event in table, return id on success or false on failure. MUST be executed before any other event operations!
+    { #Need to check uniqueness of event yet!
         $id = uniqid();
         $title = $this->Escape($title); #Username loaded from database, already escaped
         if ($this->Execute("INSERT INTO Events(Title,ID,User) VALUES('$title','$id','$username')")) {
@@ -390,13 +430,14 @@ class Event extends CRUD
         parent::__construct();
     }
 
-    public function allEvents()
+    public function allEvents() #Returns all event IDs
     {
         return $this->getData("SELECT ID FROM Events;");
     }
 
-    public function displayEvent($eventID)
+    public function displayEvent($eventID) #Displays single event given ID
     {
+        $eventID = $this->Escape($eventID);
         $content = $this->getData("SELECT Content, Datatype FROM EventContent WHERE EventID='" . $eventID . "' ORDER BY ContentOrder"); #Returns all content, in ascending order.
         $presentable_content = []; #Array that will store content in a nice structure that can parsed easily.
         $presentable_content[] = ["Datatype" => "Title", "Source" => $this->getData("SELECT Title FROM Events WHERE ID='$eventID'")[0]['Title']]; #Add title to array
@@ -408,10 +449,11 @@ class Event extends CRUD
                 $presentable_content[] = ["Datatype" => "Text", "Source" => $item['Content']];
             }
         }
+        $this->Execute("UPDATE Events SET Views = Views+1 WHERE ID='" . $eventID . "';"); #Add one to view counter
         return $presentable_content;
     }
 
-    public function getImage($imgID, $eventID)
+    public function getImage($imgID, $eventID) #Return image filepath given image and event it belongs to
     {
         $username = $this->getData("SELECT User FROM Events WHERE ID='" . $eventID . "'")[0]['User'];
         $image_result = $this->getData("SELECT Filename, Filetype FROM Images WHERE User='$username' AND FileID='$imgID'")[0];
