@@ -23,9 +23,9 @@
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Account
                         </a>
-                        <div class="dropdown-menu">
+                        <div class="login-drop dropdown-menu">
                         <h3>Login</h3>
-                        <form method="post" id="loginform" action="#">
+                        <form id="loginform">
                             <input type="hidden" name="navbar" value="true"/>
                             <input class="form-control" type="text" placeholder="Email or Username" name="id" required/>
                             <input class="form-control" type="password" placeholder="Password" name="password"
