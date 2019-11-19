@@ -18,17 +18,19 @@ $Image = new myImages();
         <?php
         if (isset($_SESSION['Username'])) {
         ?>
-        <h2>My account
-        </h2>
-        <form>
+        <a data-toggle="collapse" href="#account" role="button"
+           aria-expanded="false">
+            <h2>My account</h2></a>
+        <div class="collapse in" id="account">
             <input type="text" style="display:none">
+            <!--Used to distract browser from actual password and username fields so it doesn't autofill!-->
             <input type="password" style="display:none">
             <?
             $fields = $account->AccountFields();
             foreach ($fields
 
             as $field) {
-            if ($field["Viewable"] == true) {#If actual value of field should not be view by user, hide it (for instance password)
+                if ($field["Viewable"] == true) {#If actual value of field should not be viewed by user, hide it (for instance password)
                 $valueAttribute = $_SESSION[$field['UserField']];
             } else {
                 $valueAttribute = "Hidden value";
@@ -44,14 +46,15 @@ $Image = new myImages();
                            class="form-control"/>
                 </label>
             </div>
-        </form>
     <?
     } ?>
         <button type="button" onclick="LogOut()" class="btn btn-primary">Logout
         </button>
-        <h2>My images
-        </h2>
-        <div id="images" class="image-upload row">
+        </div>
+        <a data-toggle="collapse" href="#images" role="button"
+           aria-expanded="false">
+            <h2>My images</h2></a>
+        <div id="images" class="collapse in image-upload row">
             <?php
             $images_arr = $Image->DisplayImages($_SESSION['Username']);
             foreach ($images_arr as $image) {#Structure: Filename, Filetype
@@ -64,10 +67,12 @@ $Image = new myImages();
             }
             ?>
         </div>
-        <h2>Upload image</h2>
+        <a data-toggle="collapse" href="#image-upload" role="button"
+           aria-expanded="false">
+            <h2>Upload image</h2></a>
         <div id="upload-notifications"></div>
         <!--Append any notifications about status of upload to this div-->
-        <div id="image-upload" class="image-upload row">
+        <div id="image-upload" class="collapse in image-upload row">
             <form id="uploadimage" method="post" enctype="multipart/form-data">
                 <div id="selectImage">
                     <label class="uploader btn btn-default">
