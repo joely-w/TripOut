@@ -338,7 +338,7 @@ class myImages extends CRUD
 
 class addEvent extends CRUD
 {
-    private $supported_tags = ["html", "body", "h1", "h2", "h3", "h4", "h5", "span", "p", "b", "div", "em", "strong", "a", "ul", "li", "ol", "br", "font"];
+    private $supported_tags = ["html", "body", "h1", "h2", "h3", "h4", "h5", "span", "p", "b", "div", "em", "strong", "a", "ul", "li", "ol", "br", "font", "i"];
 
     public function __construct()
     {
