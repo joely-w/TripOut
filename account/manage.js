@@ -8,7 +8,7 @@ function updateValue(field, value) { /*Call the update method in the API*/
         },
         success: function (response) {
             console.log(response);
-            var jsonData = JSON.parse(response);
+            const jsonData = JSON.parse(response);
             if (jsonData.success === 1) {
                 $("#report").html("<div class='alert alert-success' role='alert'> " + field + " has been updated!</div>");
                 setTimeout(function () {
@@ -21,8 +21,9 @@ function updateValue(field, value) { /*Call the update method in the API*/
     });
 }
 
+
 function LogOut() { /*Call the logout method in the API*/
-    data = ["logout"];
+    let data = ["logout"];
     $.ajax({
         type: "POST",
         url: '/account/manage_process.php',
@@ -30,8 +31,8 @@ function LogOut() { /*Call the logout method in the API*/
             data: data
         },
         success: function (response) {
-            var jsonData = JSON.parse(response);
-            if (jsonData.logout === 1) {
+            const jsonData = JSON.parse(response);
+            if (jsonData["logout"] === 1) {
                 location.reload()
             }
         }
