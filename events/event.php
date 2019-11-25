@@ -7,6 +7,11 @@ include('../header.php'); ?>
 <div class="container events">
     <div id="events" class="row">
         <h1 id="title"></h1>
+        <div class="locator container">
+            <div id="occurrence">
+            </div>
+            <div id="map" class="row"></div>
+        </div>
         <div class="modal" id="modal">
             <a onclick="closeModal()" class="close">&#10006;</a>
             <img src="" id="modalImage"/>
