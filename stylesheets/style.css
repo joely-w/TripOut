@@ -20,6 +20,10 @@ p {
     font-size: 18px;
 }
 
+.bold {
+    font-weight: bold;
+}
+
 /*Navigation Bar*/
 
 .navbar {
@@ -326,6 +330,12 @@ input:-webkit-autofill:active {
     margin: 10px;
 }
 
+.descriptor {
+    font-weight: bold;
+    display: inline-block;
+    margin: 20px;
+}
+
 .create {
     text-align: center;
     width: 90%;
@@ -367,6 +377,17 @@ input:-webkit-autofill:active {
     /*Make image fit thumb box*/
 }
 
+.address {
+    text-align: center;
+}
+
+.address span {
+    display: block;
+}
+
+.locator {
+    margin-bottom: 50px;
+}
 .create p {
     font-weight: bold;
 }
@@ -567,6 +588,11 @@ input:-webkit-autofill:active {
     position: relative;
     top: 50%;
     transform: translateY(-50%);
+}
+
+
+#occurrence {
+    text-align: center;
 }
 
 /*Image selection styles*/
