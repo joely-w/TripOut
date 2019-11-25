@@ -338,7 +338,7 @@ class myImages extends CRUD
 
 class addEvent extends CRUD
 {
-    private $supported_tags = ["html", "body", "h1", "h2", "h3", "h4", "h5", "span", "p", "b", "div", "em", "strong", "a", "ul", "li", "ol", "br", "font", "i"];
+    private $supported_tags = ["html", "body", "h1", "h2", "h3", "h4", "h5", "span", "p", "b", "div", "em", "strong", "a", "ul", "li", "ol", "br", "font"];
 
     public function __construct()
     {
@@ -430,17 +430,31 @@ class Event extends CRUD
         parent::__construct();
     }
 
+    public function getLocation($eventID)
+    {
+        return $this->getData("SELECT PostCode, Line1, Line2, Town, Zoom FROM Location WHERE Event='$eventID'")[0];
+
+    }
+
+    public function getOccurence($eventID)
+    {
+        #Doesn't need to escape eventID as already escaped in displayEvent()
+        return $occurence_information = $this->getData("SELECT Type, StartDate, StartTime, EndTime, EndDate, Day, Week, Month FROM Occurrence WHERE Event='$eventID'")[0];
+    }
+
     public function allEvents() #Returns all event IDs
     {
         return $this->getData("SELECT ID FROM Events;");
     }
 
     public function displayEvent($eventID) #Displays single event given ID
-    {
+    { ##SHOULD SPLIT PARSING CONTENT INTO SEPARATE FUNCTION##
         $eventID = $this->Escape($eventID);
         $content = $this->getData("SELECT Content, Datatype FROM EventContent WHERE EventID='" . $eventID . "' ORDER BY ContentOrder"); #Returns all content, in ascending order.
         $presentable_content = []; #Array that will store content in a nice structure that can parsed easily.
         $presentable_content[] = ["Datatype" => "Title", "Source" => $this->getData("SELECT Title FROM Events WHERE ID='$eventID'")[0]['Title']]; #Add title to array
+        $presentable_content[] = ["Datatype" => "Occurrence", "Source" => $this->getOccurence($eventID)]; #Add event occurence to array
+        $presentable_content[] = ["Datatype" => "Location", "Source" => $this->getLocation($eventID)]; #Add location to array
         foreach ($content as $item) { #Add
             if ($item['Datatype'] == "image") {
                 $img_src = $this->getImage($item['Content'], $eventID);
@@ -449,11 +463,11 @@ class Event extends CRUD
                 $presentable_content[] = ["Datatype" => "Text", "Source" => $item['Content']];
             }
         }
-        $this->Execute("UPDATE Events SET Views = Views+1 WHERE ID='" . $eventID . "';"); #Add one to view counter
+        $this->Execute("UPDATE Events SET Views = Views+1 WHERE ID='" . $eventID . "';");
         return $presentable_content;
     }
 
-    public function getImage($imgID, $eventID) #Return image filepath given image and event it belongs to
+    public function getImage($imgID, $eventID)
     {
         $username = $this->getData("SELECT User FROM Events WHERE ID='" . $eventID . "'")[0]['User'];
         $image_result = $this->getData("SELECT Filename, Filetype FROM Images WHERE User='$username' AND FileID='$imgID'")[0];
