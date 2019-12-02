@@ -1,5 +1,5 @@
 /*Fonts*/
-@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,900|Yantramanav&display=swap');
+@import url('//fonts.googleapis.com/css?family=Source+Sans+Pro:400,900|Yantramanav&display=swap');
 /*Universal styles*/
 
 body {
@@ -381,13 +381,19 @@ input:-webkit-autofill:active {
     text-align: center;
 }
 
-.address span {
+.address .bold {
     display: block;
 }
 
 .locator {
     margin-bottom: 50px;
 }
+
+.views {
+    font-size: 28px;
+    margin: 15px;
+}
+
 .create p {
     font-weight: bold;
 }
@@ -524,6 +530,7 @@ input:-webkit-autofill:active {
 .image-upload {
     border: dashed 3px orange;
     padding: 5px;
+    margin-bottom: 25px;
 }
 
 #selectImage input[type=file] {
@@ -621,3 +628,5 @@ input:-webkit-autofill:active {
 .create-title {
     text-decoration: underline;
 }
+
+/* Graph styles */
