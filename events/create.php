@@ -5,7 +5,7 @@
  */
 $title = "Create Event";
 $styles = array("//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css",
-    "//stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css");
+    "//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css");
 $scripts = array("//momentjs.com/downloads/moment.js",
     "//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js", "/images/upload_handler.js");
 include('../database/config.php');
@@ -15,10 +15,7 @@ include('../header.php');
 
 <?php
 include('../navigation.php');
-if (isset($_SESSION['Username'])) {
-
-    $Image = new myImages();
-    ?>
+if (isset($_SESSION['Username'])) { ?>
     <form method="post" id="event_form" action="create_process.php">
 
         <div id="alert_box" class="center create-title">
@@ -35,7 +32,7 @@ if (isset($_SESSION['Username'])) {
                 <h1>Create an event</h1>
                 <input class="form-control" id="title" type="text" name="title" placeholder="Event Title"/>
                 <a data-toggle="collapse" href="#timelocation" role="button"
-                   aria-expanded="false" aria-controls="collapseExample">
+                   aria-expanded="false">
                     <h2>Time and Location</h2></a>
                 <div class="collapse in" id="timelocation">
                     <div id="time">
@@ -70,7 +67,8 @@ if (isset($_SESSION['Username'])) {
                             <input type="text" id="county" class="form-control" id="county" name="county"
                                    placeholder="town"/>
                             Zoom map:
-                            <input type="range" min="1" max="20" value="14" id="zoom" onchange="showMap(this.value)">
+                            <input type="range" class="form-control" min="1" max="20" value="14" id="zoom"
+                                   onchange="showMap(this.value)">
 
 
                             <button type="button" onclick="showMap(14, 'addr')" class="btn-primary btn">Find venue
