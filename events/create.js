@@ -205,13 +205,13 @@ function showMap(zoom, mode) {
     if (mode === "addr") {
         if (current_post.length >= 6 && image_exist === false) {
             address = encodeURI($("#line1").val() + $("#line2").val() + "," + $("#county").val() + "," + current_post);
-            marker = encodeURI("size:mid|color:0xFFFF00|label:Venue|" + address);
+            marker = encodeURI("size:mid|color:0xFFFF00|label:Venue|") + address;
             let map_resource = `https://maps.googleapis.com/maps/api/staticmap?center=${address}&size=${res}&key=AIzaSyAqt8ejRfMThaP6C3Kfxcd8fN7OpI5RXUc&zoom=${zoom}&markers=${marker}`;
             $("#map").html(`<img src="${map_resource}" />`);
         }
     } else {
         address = encodeURI(current_post);
-        marker = encodeURI("size:mid|color:0xFFFF00|label:Venue|" + address);
+        marker = encodeURI("size:mid|color:0xFFFF00|label:Venue|") + address;
         let map_resource = `https://maps.googleapis.com/maps/api/staticmap?center=${address}&size=${res}&key=AIzaSyAqt8ejRfMThaP6C3Kfxcd8fN7OpI5RXUc&zoom=${zoom}&markers=${marker}`;
         $("#map").html(`<img src="${map_resource}" />`);
     }
