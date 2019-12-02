@@ -1,6 +1,6 @@
 <?php
-$title = $Event[0]["Source"];
 $scripts = array("/images/modal.js", "event.js");
+$styles = array("//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css");
 include('../header.php'); ?>
 <body>
 <?php include('../navigation.php'); ?>
