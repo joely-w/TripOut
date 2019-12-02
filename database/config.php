@@ -338,7 +338,7 @@ class myImages extends CRUD
 
 class addEvent extends CRUD
 {
-    private $supported_tags = ["html", "body", "h1", "h2", "h3", "h4", "h5", "span", "p", "b", "div", "em", "strong", "a", "ul", "li", "ol", "br", "font"];
+    private $supported_tags = ["html", "body", "h1", "h2", "h3", "h4", "h5", "span", "p", "b", "div", "em", "strong", "a", "ul", "li", "ol", "br", "font", "i"];
 
     public function __construct()
     {
@@ -357,7 +357,7 @@ class addEvent extends CRUD
         $zoom = $address['zoom'];
         echo "INSERT INTO Location(Event, PostCode, Line1, Line2, Town, Zoom) VALUES('$eventID', '$postcode','$line1', '$line2', '$town', $zoom )";
         $this->Execute("INSERT INTO Location(Event, PostCode, Line1, Line2, Town, Zoom) VALUES('$eventID', '$postcode','$line1', '$line2', '$town', $zoom )");
-        #Address array filled with all details required for map}
+        #Address array filled with all details required for map
     }
 
     public function addOccurence($eventID, $occurence)
@@ -369,31 +369,32 @@ class addEvent extends CRUD
         $starttime = date("G:i:00", strtotime($occurence['starttime']));
         $endtime = date("G:i:00", strtotime($occurence['endtime']));
         $type = $occurence['type'];
-        if ($type == "once") {
-            $startdate = date_format(date_create_from_format("d/m/Y", $occurence['startdate']), "Y-m-d");
-            $enddate = date_format(date_create_from_format("d/m/Y", $occurence['enddate']), "Y-m-d");
-            return $this->Execute("INSERT INTO Occurrence(Type, Event, StartDate, EndDate, StartTime,EndTime) VALUES('Once', '$eventID', '$startdate','$enddate','$starttime', '$endtime')");
-        } elseif ($type == "daily") {
-            return $this->Execute("INSERT INTO Occurrence(Type, Event, StartTime, EndTime) VALUES('Daily', '$eventID','$starttime', '$endtime')");
-        } elseif ($type == 'weekly') {
-            $day = $occurence['day'];
-            return $this->Execute("INSERT INTO Occurrence(Type, Event, StartTime, EndTime, Day) VALUES('Weekly', '$eventID','$starttime', '$endtime', '$day')");
-        } elseif ($type == 'monthly') {
-            $day = $occurence['day'];
-            $week = $occurence['week'];
-            return $this->Execute("INSERT INTO Occurrence(Type, Event, StartTime, EndTime, Day, Week) VALUES('Monthly', '$eventID','$starttime', '$endtime', '$day', '$week')");
-        } elseif ($type == 'yearly') {
-            $day = $occurence['day'];
-            $month = $occurence['month'];
-            echo "INSERT INTO Occurrence(Type, Event, StartTime, EndTime, Day, Month) VALUES('Yearly', '$eventID','$starttime', '$endtime', '$day', '$month')";
-            return $this->Execute("INSERT INTO Occurrence(Type, Event, StartTime, EndTime, Day, Month) VALUES('Yearly', '$eventID','$starttime', '$endtime', '$day', '$month')");
+        switch ($type) {
+            case "once":
+                $startdate = date_format(date_create_from_format("d/m/Y", $occurence['startdate']), "Y-m-d");
+                $enddate = date_format(date_create_from_format("d/m/Y", $occurence['enddate']), "Y-m-d");
+                return $this->Execute("INSERT INTO Occurrence(Type, Event, StartDate, EndDate, StartTime,EndTime) VALUES('Once', '$eventID', '$startdate','$enddate','$starttime', '$endtime')");
+            case "daily":
+                return $this->Execute("INSERT INTO Occurrence(Type, Event, StartTime, EndTime) VALUES('Daily', '$eventID','$starttime', '$endtime')");
+            case "weekly":
+                $day = $occurence['day'];
+                return $this->Execute("INSERT INTO Occurrence(Type, Event, StartTime, EndTime, Day) VALUES('Weekly', '$eventID','$starttime', '$endtime', '$day')");
+            case "monthly":
+                $day = $occurence['day'];
+                $week = $occurence['week'];
+                return $this->Execute("INSERT INTO Occurrence(Type, Event, StartTime, EndTime, Day, Week) VALUES('Monthly', '$eventID','$starttime', '$endtime', '$day', '$week')");
+            case "yearly":
+                $day = $occurence['day'];
+                $month = $occurence['month'];
+                return $this->Execute("INSERT INTO Occurrence(Type, Event, StartTime, EndTime, Day, Month) VALUES('Yearly', '$eventID','$starttime', '$endtime', '$day', '$month')");
         }
-
     }
 
     public function addContent($id, $datatype, $content, $position)
     { #Add an event content section
         $content = $this->Escape($content);
+
+        /** @var integer $position */
         return $this->Execute("INSERT INTO EventContent(EventID, ContentOrder, Datatype, Content) VALUES('$id',$position, '$datatype','$content')");
     }
 
@@ -428,6 +429,9 @@ class Event extends CRUD
     public function __construct()
     {
         parent::__construct();
+        if (session_status() == PHP_SESSION_NONE) { #If session has not already been started, start it!
+            session_start();
+        }
     }
 
     public function getLocation($eventID)
@@ -453,8 +457,10 @@ class Event extends CRUD
         $content = $this->getData("SELECT Content, Datatype FROM EventContent WHERE EventID='" . $eventID . "' ORDER BY ContentOrder"); #Returns all content, in ascending order.
         $presentable_content = []; #Array that will store content in a nice structure that can parsed easily.
         $presentable_content[] = ["Datatype" => "Title", "Source" => $this->getData("SELECT Title FROM Events WHERE ID='$eventID'")[0]['Title']]; #Add title to array
-        $presentable_content[] = ["Datatype" => "Occurrence", "Source" => $this->getOccurence($eventID)]; #Add event occurence to array
+        $presentable_content[] = ["Datatype" => "Occurrence", "Source" => $this->getOccurence($eventID)]; #Add event occurrence to array
         $presentable_content[] = ["Datatype" => "Location", "Source" => $this->getLocation($eventID)]; #Add location to array
+        $presentable_content[] = ["Datatype" => "Views", "Source" => $this->viewCounter($eventID)];
+        $presentable_content[] = ["Datatype" => "Popularity", "Source" => $this->getPopularity($eventID)];
         foreach ($content as $item) { #Add
             if ($item['Datatype'] == "image") {
                 $img_src = $this->getImage($item['Content'], $eventID);
@@ -474,6 +480,58 @@ class Event extends CRUD
         $img_src = "/events/images/$username/" . $image_result['Filename'] . "." . $image_result['Filetype'];
         return $img_src;
     }
+
+    public function getPopularity($eventID)
+    {
+        #Get how many likes the event has
+        $likes = $this->getData("SELECT COUNT(LikeBoolean) FROM Popularity WHERE LikeBoolean=true and Event='$eventID'");
+        #Get how many dislikes the event has
+        $dislikes = $this->getData("SELECT COUNT(LikeBoolean) FROM Popularity WHERE LikeBoolean=false and Event='$eventID'");
+        if (isset($_SESSION['Username'])) {
+            return ["user" => $this->isPopular($_SESSION['Username'], $eventID), "likes" => $likes[0]['COUNT(LikeBoolean)'], "dislikes" => $dislikes[0]['COUNT(LikeBoolean)']];
+        } else {
+            return ["user" => false, "likes" => $likes[0]['COUNT(LikeBoolean)'], "dislikes" => $dislikes[0]['COUNT(LikeBoolean)']];
+
+        }
+
+    }
+
+    public function isPopular($user, $eventID)
+    {
+        $current_status = $this->getData("SELECT LikeBoolean FROM Popularity WHERE User='$user' AND Event='$eventID';");
+        if ($current_status == []) { #If user has not liked or disliked the event return false
+            return false;
+        } else if ($current_status[0]['LikeBoolean'] == true) {
+            return "like";
+        } else if ($current_status[0]['LikeBoolean'] == false) {
+            return "dislike";
+        }
+    }
+
+    public function eventPop($eventID, $status)
+    { #Add like record to database, including validation
+        if (isset($_SESSION['Username'])) {
+            $user = $this->Escape($_SESSION['Username']);
+            $eventID = $this->Escape($eventID);
+            $status = $this->Escape($status); #Status is whether like is true or false
+            if ($this->isPopular($user, $eventID) == false) { #If user hasn't already voted on event, add record
+                /** @var bool $status */
+                $this->Execute("INSERT INTO Popularity(Event, User, LikeBoolean, Date) VALUES('$eventID', '$user', $status, CURDATE())");#Will fail if Event or User don't exist or if Status is not a boolean
+            } else { #If user has voted before, change vote
+                /** @var bool $status */
+                $this->Execute("UPDATE Popularity SET LikeBoolean = $status, Date = CURDATE() WHERE Event = '$eventID' AND User='$user'"); #Update vote of users
+            }
+            return $status;
+        } else {
+            return "error";
+        }
+    }
+
+    public function viewCounter($eventID)
+    {
+        return $this->getData("SELECT Views FROM Events WHERE ID='$eventID';")[0];
+    }
+
 }
 
 class Featured extends Event
@@ -497,3 +555,46 @@ class Featured extends Event
 
 }
 
+class Statistics extends CRUD
+{ #Object to give statistics about events
+    public function __construct()
+    {
+        parent:: __construct();
+        if (session_status() == PHP_SESSION_NONE) { #If session has not already been started, start it!
+            session_start();
+        }
+    }
+
+    public function getLikeTrends($eventID, $range)
+    { #Get number of likes each day, within a range->(in days)
+        $today = date("Y-m-j");
+        $current = date('Y-m-d', (strtotime('-' . $range . ' day', strtotime($today))));
+        $eventID = $this->Escape($eventID);
+        $sql = "SELECT LikeBoolean, Date FROM Popularity WHERE Date BETWEEN $current AND '$today' AND Event = '$eventID'";
+        return ["range" => $range, "statuses" => $this->getData($sql)];
+    }
+
+    public function getEvents()
+    { #Return all users events
+        $user = $this->Escape($_SESSION['Username']);
+        return $this->getData("SELECT * FROM Events WHERE User='$user';");
+    }
+
+    public function eventLikes($eventID)
+    { #Retun how many likes and dislikes an event has
+        $eventID = $this->Escape($eventID);
+        #Get how many likes the event has
+        $likes = $this->getData("SELECT COUNT(LikeBoolean) FROM Popularity WHERE LikeBoolean=true and Event='$eventID'")[0]['COUNT(LikeBoolean)'];
+        #Get how many dislikes the event has
+        $dislikes = $this->getData("SELECT COUNT(LikeBoolean) FROM Popularity WHERE LikeBoolean=false and Event='$eventID'")[0]['COUNT(LikeBoolean)'];
+        return ["likes" => $likes, "dislikes" => $dislikes];
+    }
+
+    public function Views($eventID)
+    { #Return how many views an event has
+        $eventID = $this->Escape($eventID);
+        return $this->getData("SELECT Views FROM Events WHERE ID='$eventID';")[0]["Views"];
+
+    }
+
+}
