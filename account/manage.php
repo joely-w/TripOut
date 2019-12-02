@@ -1,5 +1,6 @@
 <?php
 $title = "Manage My Account";
+
 $scripts = array("manage.js", "../images/upload_handler.js");
 include('../header.php');
 include('../database/config.php');
@@ -29,27 +30,27 @@ $Image = new myImages();
             $fields = $account->AccountFields();
             foreach ($fields
 
-            as $field) {
+                     as $field) {
                 if ($field["Viewable"] == true) {#If actual value of field should not be viewed by user, hide it (for instance password)
-                $valueAttribute = $_SESSION[$field['UserField']];
-            } else {
-                $valueAttribute = "Hidden value";
-            }
-            ?>
-            <div class="col-md-4">
-                <label>
-                    <?php echo $field['UserField'] ?>:
-                    <br>
-                    <input type="<?php echo $field['Datatype'] ?>" name="<?php echo $field['UserField'] ?>"
-                           value="<?php echo $valueAttribute ?>"
-                           onchange="updateValue('<?php echo $field['UserField'] ?>',this.value)"
-                           class="form-control"/>
-                </label>
-            </div>
-    <?
-    } ?>
-        <button type="button" onclick="LogOut()" class="btn btn-primary">Logout
-        </button>
+                    $valueAttribute = $_SESSION[$field['UserField']];
+                } else {
+                    $valueAttribute = "Hidden value";
+                }
+                ?>
+                <div class="col-md-4">
+                    <label>
+                        <?php echo $field['UserField'] ?>:
+                        <br>
+                        <input type="<?php echo $field['Datatype'] ?>" name="<?php echo $field['UserField'] ?>"
+                               value="<?php echo $valueAttribute ?>"
+                               onchange="updateValue('<?php echo $field['UserField'] ?>',this.value)"
+                               class="form-control"/>
+                    </label>
+                </div>
+                <?
+            } ?>
+            <button type="button" onclick="LogOut()" class="btn btn-primary">Logout
+            </button>
         </div>
         <a data-toggle="collapse" href="#images" role="button"
            aria-expanded="false">
@@ -91,8 +92,8 @@ $Image = new myImages();
             <img src="" id="modalImage"/>
         </div>
 
+        <a href="/events/statistics.php" alt="Event Statistics" class="btn btn-primary">My Event Statistics</a>
     </div>
-
     <?
     } else {
         ?>
