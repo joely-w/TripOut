@@ -207,10 +207,13 @@ class Login extends CRUD
     {
         $value = $this->Escape($value); #Escape values before saving to session
         $field = $this->Escape($field);
+        $_SESSION["Backup" . $field] = $_SESSION[$field];
         $_SESSION[$field] = $value;
         if ($this->UpdateField($field)) {
             return true;
         } else {
+            $_SESSION[$field] = $_SESSION["Backup" . $field];
+            unset($_SESSION["Backup" . $field]);
             return false;
         }
 
@@ -219,13 +222,12 @@ class Login extends CRUD
     private function UpdateField($field)
     { #Push field changes to database, $_SESSION key's should be identical to field names
         if ($field == "Password") {
-            $_SESSION['Password'] = md5($_SESSION['Password']);
+            $_SESSION['Password'] = md5($_SESSION['Password'] . $this->getData("SELECT Salt FROM Users WHERE Username = '" . $_SESSION['Username'] . "';")[0]['Salt']);
         }
         if ($field == "Username") {
             if (!$this->UserExists($_SESSION['Username'])) { #If new username doesn't already exist in database, apply username update
-                rename("../events/images/" . $_SESSION['OldUsername'], "../events/images/" . $_SESSION['Username']); #Rename users image directory
-                unset($_SESSION['OldUsername']); #Removes backup, because who needs it at this point
-                return ($this->Execute("UPDATE Users SET 'Username'='$_SESSION[$field]';"));
+                rename("../events/images/" . $_SESSION['BackupUsername'], "../events/images/" . $_SESSION['Username']); #Rename users image directory
+                return ($this->Execute("UPDATE Users SET Username='" . $_SESSION[$field] . "' WHERE Username = '" . $_SESSION['BackupUsername'] . "'"));
             } else {
                 $this->errors[] = "Username failed to update";
                 $_SESSION['Username'] = $_SESSION['OldUsername'];
@@ -249,7 +251,7 @@ class Login extends CRUD
         if ($this->getData("SELECT Username from Users WHERE Username='$username'") == []) {
             return false; #Username does not already exist
         } else {
-            $this->errors[] = "Username already exists!";
+            $this->errors[] = "Username already exists!" . $_SESSION['Username'];
 
             return true; #Username already exists
         }
