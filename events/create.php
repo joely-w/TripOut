@@ -5,7 +5,7 @@
  */
 $title = "Create Event";
 $styles = array("//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css",
-    "//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css");
+    "//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css", "//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css");
 $scripts = array("//momentjs.com/downloads/moment.js",
     "//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js", "/images/upload_handler.js");
 include('../database/config.php');
