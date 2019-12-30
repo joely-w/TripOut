@@ -3,15 +3,23 @@ include_once('/var/www/html/database/config.php'); #Include script, unless there
 $Stats = new Statistics();
 $CallbackData = [];
 $eventID = $_POST['id'];
-foreach ($_POST['request'] as $item) {
-    if ($item == "events") {
-        $CallbackData["events"] = $Stats->getEvents();
-    } else if ($item == "likes") {
-        $CallbackData["likes"] = $Stats->eventLikes($eventID);
-    } else if ($item == "views") {
-        $CallbackData["views"] = $Stats->Views($eventID);
-    } else if ($item == "liketrend") {
-        $CallbackData["liketrend"] = $Stats->getLikeTrends($eventID, $_POST['range']);
+foreach ($_POST['request'] as $item) { #need to convert to switch
+    switch ($item) {
+        case "events":
+            $CallbackData["events"] = $Stats->getEvents();
+            break;
+        case "likes":
+            $CallbackData["likes"] = $Stats->eventLikes($eventID);
+            break;
+        case "views":
+            $CallbackData["views"] = $Stats->Views($eventID);
+            break;
+        case "liketrend":
+            $CallbackData["liketrend"] = $Stats->getLikeTrends($eventID, $_POST['range']);
+            break;
+        case "allevents":
+            $CallbackData['allevents'] = $Stats->eventPopularity();
     }
-}
+
+} #Returns all data asked for, so data only needs to be requested once
 echo json_encode($CallbackData);
