@@ -461,8 +461,8 @@ class Event extends CRUD
         $presentable_content[] = ["Datatype" => "Title", "Source" => $this->getData("SELECT Title FROM Events WHERE ID='$eventID'")[0]['Title']]; #Add title to array
         $presentable_content[] = ["Datatype" => "Occurrence", "Source" => $this->getOccurence($eventID)]; #Add event occurrence to array
         $presentable_content[] = ["Datatype" => "Location", "Source" => $this->getLocation($eventID)]; #Add location to array
-        $presentable_content[] = ["Datatype" => "Views", "Source" => $this->viewCounter($eventID)];
-        $presentable_content[] = ["Datatype" => "Popularity", "Source" => $this->getPopularity($eventID)];
+        $presentable_content[] = ["Datatype" => "Views", "Source" => $this->viewCounter($eventID)]; #Add view counter to array
+        $presentable_content[] = ["Datatype" => "Popularity", "Source" => $this->getPopularity($eventID)]; #Add likes per date
         foreach ($content as $item) { #Add
             if ($item['Datatype'] == "image") {
                 $img_src = $this->getImage($item['Content'], $eventID);
@@ -557,7 +557,7 @@ class Featured extends Event
 
 }
 
-class Statistics extends CRUD
+class Statistics extends Event
 { #Object to give statistics about events
     public function __construct()
     {
@@ -590,6 +590,17 @@ class Statistics extends CRUD
         #Get how many dislikes the event has
         $dislikes = $this->getData("SELECT COUNT(LikeBoolean) FROM Popularity WHERE LikeBoolean=false and Event='$eventID'")[0]['COUNT(LikeBoolean)'];
         return ["likes" => $likes, "dislikes" => $dislikes];
+    }
+
+    public function eventPopularity()
+    {
+        $eventData = [];
+        $user = $this->Escape($_SESSION['Username']);
+        $events = $this->getData("SELECT Views, Title, ID FROM Events WHERE User='$user'");
+        foreach ($events as $event) {
+            $eventData[] = ["Views" => $event['Views'], "Title" => $event['Title'], "ID" => $event['ID'], "Location" => $this->getLocation($event['ID'])];
+        }
+        return $eventData;
     }
 
     public function Views($eventID)
