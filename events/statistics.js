@@ -58,8 +58,8 @@ function displayForAll() {
                 url: 'https://api.postcodes.io/postcodes',
                 success: function (response) {
                     for (let event = 0; event < data["allevents"].length; event++) {
-                        data["allevents"][event]['Location']['long'] = parseFloat(response["result"][event]["result"]["longitude"]);
-                        data["allevents"][event]['Location']['lat'] = parseFloat(response["result"][event]["result"]["latitude"]);
+                        data["allevents"][event]['Location']['long'] = response["result"][event]["result"]["longitude"];
+                        data["allevents"][event]['Location']['lat'] = response["result"][event]["result"]["latitude"];
                     }
                 }
             });
@@ -68,35 +68,29 @@ function displayForAll() {
     });
 }
 
-function displayMap(location_data) {// The svg
+function displayMap(location_data) {
     let svg = d3.select("svg"),
         width = +svg.attr("width"),
         height = +svg.attr("height");
 
-// Map and projection
     let projection = d3.geoMercator()
-        .center([3.4360, 52.3555])                // GPS of location to zoom on
-        .scale(1020)                       // This is like the zoom
+        .center([3.4360, 52.3555])
+        .scale(3000)
         .translate([width / 2, height / 2]);
 
     let markers = [];
-// Create data for circles:
     for (let i = 0; i < location_data.length; i++) {
         markers[i] = {
-            longitude: location_data[i]['Location']['long'],
-            latitude: location_data[i]['Location']['lat']
+            long: location_data[i]['Location']['long'],
+            lat: location_data[i]['Location']['lat']
         }
     }
-
-// Load external data and boot
     d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson", function (data) {
 
-        // Filter data
         data.features = data.features.filter(function (d) {
             return d.properties.name === "England";
         });
 
-        // Draw the map
         svg.append("g")
             .selectAll("path")
             .data(data.features)
@@ -109,8 +103,9 @@ function displayMap(location_data) {// The svg
             .style("stroke", "black")
             .style("opacity", .3);
 
-        // Add circles:
         for (let i = 0; i < markers.length; i++) {
+            let colour = ColourGenerator();
+            $("#event_titles").append(`<li><span class='blockcol' style='background-color:#${colour}'></span><span class="text">` + location_data[i]['Title'] + `</span></li>`);
             svg
                 .selectAll("myCircles")
                 .data([markers[i]])
@@ -122,11 +117,11 @@ function displayMap(location_data) {// The svg
                 .attr("cy", function (d) {
                     return projection([d.long, d.lat])[1]
                 })
-                .attr("r", 14)
-                .style("fill", "69b3a2")
-                .attr("stroke", "#69b3a2")
+                .attr("r", Math.ceil(location_data[i]['Views']) / 10)
+                .style("fill", colour)
+                .attr("stroke", colour)
                 .attr("stroke-width", 3)
-                .attr("fill-opacity", .4)
+                .attr("fill-opacity", .7)
         }
     })
 }
@@ -175,6 +170,17 @@ function formatDate(date) {
     return date.getUTCFullYear() + "-" + twoDigits(1 + date.getUTCMonth()) + "-" + twoDigits(date.getUTCDate())
 }
 
+/**
+ * @return {string}
+ */
+function ColourGenerator() {
+    let strings = '0123456789ABCDEF';
+    let initial_string = "";
+    for (let index = 0; index <= 5; index++) {
+        initial_string += strings[Math.floor(Math.random() * 16)];
+    }
+    return initial_string;
+}
 
 function compileDates(data, range, status_type) {
     let compiled_dates = [];
@@ -325,3 +331,7 @@ function loadContent(views) { //Animate view counter
         }
     });
 }
+
+$(document).ready(function () {
+    displayForAll();
+});
