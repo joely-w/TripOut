@@ -19,8 +19,17 @@ include('../header.php'); ?>
     </div>
     <div id="charts" class="charts row">
         <!-- Could do more, maybe make range dependant on creation of event !-->
+        <div id="charts" class="charts row">
+            <h3>Popularity based on where the event is located</h3>
+            <!-- Could do more, maybe make range dependant on creation of event !-->
+            <div class="col-md-6">
+                <svg id="my_dataviz" width="1200" height="1200"></svg>
+            </div>
+            <div class="col-md-4">
+                <ul id="event_titles"></ul>
+            </div>
+        </div>
         <div class="col-md-6" id="PieChart">
-            <svg id="my_dataviz" width="440" height="400"></svg>
         </div>
         <div class="col-md-6" id="LikesPerDay"></div>
     </div>
