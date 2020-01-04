@@ -362,8 +362,9 @@ class addEvent extends CRUD
         $line2 = $address['line2'];
         $town = $address['county'];
         $zoom = $address['zoom'];
-        echo "INSERT INTO Location(Event, PostCode, Line1, Line2, Town, Zoom) VALUES('$eventID', '$postcode','$line1', '$line2', '$town', $zoom )";
-        $this->Execute("INSERT INTO Location(Event, PostCode, Line1, Line2, Town, Zoom) VALUES('$eventID', '$postcode','$line1', '$line2', '$town', $zoom )");
+        $lat = $address['lat'];
+        $lng = $address['lng'];
+        $this->Execute("INSERT INTO Location(Event, PostCode, Line1, Line2, Town, Zoom, lat, lng) VALUES('$eventID', '$postcode','$line1', '$line2', '$town', $zoom, $lat, $lng )");
         #Address array filled with all details required for map
     }
 
