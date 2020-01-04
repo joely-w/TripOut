@@ -1,5 +1,13 @@
 let number_of_fields = 0;
+
+let current_recurrence;
+
+let image_exist = false;
+
+let current_post;
+
 let contentFields = []; /*Contains field keys, structure of each node: [{dataType,dataName}]*/
+
 let toolbar_elements = [ /*Contains all element details for text sidebar, used to iteratively create toolbar instead of storing static html, structure: [FA Icon, Exec Command]*/
     ["underline", "underline"],
     ["italic", "italic"],
@@ -87,13 +95,47 @@ function Add(content) {
 }
 
 function parseLocation() {
+    let lng;
+    let lat;
+    $.ajax({
+        url: "https://api.postcodes.io/postcodes/" + current_post,
+        type: 'GET',
+        dataType: "json",
+        async: false,
+        success: function (res) {
+            lng = res['result']['longitude'];
+            lat = res['result']['latitude'];
+        }
+    });
     return {
         postcode: current_post,
         line1: $("#line1").val(),
         line2: $("#line2").val(),
         county: $("#county").val(),
-        zoom: $("#zoom").val()
-    };
+        zoom: $("#zoom").val(),
+        lng: lng,
+        lat: lat
+    }
+
+}
+
+function postCodeLookup(postcode, type) {
+    if (postcode.length >= 6 && current_post !== postcode) { //If postcode right length and has changed from previous lookup
+        $.ajax({
+            url: "https://api.postcodes.io/postcodes/" + postcode,
+            type: 'GET',
+            success: function (res) {
+                if (res['status'] === 200) {
+                    let county = $('#county');
+                    county.val(res['result']['parish']);
+                    county.prop("disabled", true);
+                    current_post = postcode;
+                    showMap(10, postcode);
+                    $("#zoom").val(10);
+                }
+            }
+        });
+    }
 }
 
 function parseOccurence() {
@@ -152,12 +194,6 @@ function processForm() {
             contentFields[i].dataSrc = document.getElementById(contentFields[i].dataSrc).innerHTML; /*In processForm() as should not be called before user has finished editing and is submitting*/
         }
     }
-    console.log({
-        eventOccurence: parseOccurence(),
-        eventLocation: parseLocation(),
-        eventTitle: document.getElementById("title").value,
-        content: contentFields
-    });
     $.ajax({
         url: "/events/create_process.php",
         type: "POST",
@@ -168,35 +204,11 @@ function processForm() {
             content: contentFields
         },
         success: function (response) {
-            console.log(response);
             $("#content").html("<h1>Event has been created!</h1>")
         },
 
     });
 }
-
-let current_post;
-
-function postCodeLookup(postcode) {
-    if (postcode.length >= 6 && current_post !== postcode) { //If postcode right length and has changed from previous lookup
-        $.ajax({
-            url: "https://api.postcodes.io/postcodes/" + postcode,
-            type: 'GET',
-            success: function (res) {
-                if (res['status'] === 200) {
-                    let county = $('#county');
-                    county.val(res['result']['parish']);
-                    county.prop("disabled", true);
-                    current_post = postcode;
-                    showMap(10, postcode)
-                }
-            }
-        });
-        $("#zoom").val(10);
-    }
-}
-
-let image_exist = false;
 
 function showMap(zoom, mode) {
     let address;
@@ -207,18 +219,17 @@ function showMap(zoom, mode) {
             address = encodeURI($("#line1").val() + $("#line2").val() + "," + $("#county").val() + "," + current_post);
             marker = encodeURI("size:mid|color:0xFFFF00|label:Venue|") + address;
             let map_resource = `https://maps.googleapis.com/maps/api/staticmap?center=${address}&size=${res}&key=AIzaSyAqt8ejRfMThaP6C3Kfxcd8fN7OpI5RXUc&zoom=${zoom}&markers=${marker}`;
-            $("#map").html(`<img src="${map_resource}" />`);
+            $("#map").html(`<img src="${map_resource}"  alt=""/>`);
         }
     } else {
         address = encodeURI(current_post);
         marker = encodeURI("size:mid|color:0xFFFF00|label:Venue|") + address;
         let map_resource = `https://maps.googleapis.com/maps/api/staticmap?center=${address}&size=${res}&key=AIzaSyAqt8ejRfMThaP6C3Kfxcd8fN7OpI5RXUc&zoom=${zoom}&markers=${marker}`;
-        $("#map").html(`<img src="${map_resource}" />`);
+        $("#map").html(`<img src="${map_resource}"/>`);
     }
     $("#zoom").val(zoom);
 }
 
-let current_recurrence;
 $('#recurrence').on('change', function () {
     if (this.value === "once" && current_recurrence !== "once") { //Don't do anything if user just clicks same option again
         current_recurrence = "once";
@@ -240,12 +251,22 @@ $('#recurrence').on('change', function () {
         $("#enddate").on("dp.change", function (e) {
             $('#startdate').data("DateTimePicker").maxDate(e.date);
         });
-    } else if (this.value === "daily" && current_recurrence !== "daily") { //If
+    } else if (this.value === "daily" && current_recurrence !== "daily") {
         current_recurrence = "daily";
         $("#date").html(null);
     } else if (this.value === "weekly" && current_recurrence !== "weekly") {
         current_recurrence = "weekly";
-        $("#date").html(`<label for="recurrence"><p>What day does your event happen on?</p></label><select class="select-css" id="day" name="day"> <option selected disabled>Select</option> <option value="monday">Monday</option> <option value="tuesday">Tuesday</option> <option value="wednesday">Wednesday</option> <option value="thursday">Thursday</option> <option value="friday">Friday</option> <option value="saturday">Saturday</option> <option value="sunday">Sunday</option> </select>`);
+        $("#date").html(`<label for="recurrence"><p>What day does your event happen on?</p></label><select
+                class="select-css" id="day" name="day">
+            <option selected disabled>Select</option>
+            <option value="monday">Monday</option>
+            <option value="tuesday">Tuesday</option>
+            <option value="wednesday">Wednesday</option>
+            <option value="thursday">Thursday</option>
+            <option value="friday">Friday</option>
+            <option value="saturday">Saturday</option>
+            <option value="sunday">Sunday</option>
+        </select>`);
     } else if (this.value === "monthly" && current_recurrence !== "monthly") {
         current_recurrence = "monthly";
         $("#date").html(`<label for="week"><p>Which week in the month the event on?</p></label> <select class="select-css" id="week" name="weeknumber"> <option selected disabled>Select</option> <option value="1">Week 1</option> <option value="2">Week 2</option> <option value="3">Week 3</option> <option value="4">Week 4</option> </select><label for="day"><p>What day in the week is the event?</p></label> <select class="select-css" id="day" name="day"> <option selected disabled>Select</option> <option value="Monday">Monday</option> <option value="Tuesday">Tuesday</option> <option value="Wednesday">Wednesday</option> <option value="Thursday">Thursday</option> <option value="Friday">Friday</option> <option value="Saturday">Saturday</option> <option value="Sunday">Sunday</option> </select>`);
@@ -256,23 +277,29 @@ $('#recurrence').on('change', function () {
     }
 });
 
-$('#datetimepicker').datetimepicker({
-    inline: true,
-    sideBySide: true,
-    format: 'LT'
-});
-$('#datetimepicker1').datetimepicker({
-    inline: true,
-    sideBySide: true,
-    format: 'LT'
-});
-$("#datetimepicker").on("dp.change", function (e) {
-    $('#datetimepicker1').data("DateTimePicker").minDate(e.date);
-});
-$("#datetimepicker1").on("dp.change", function (e) {
-    $('#datetimepicker').data("DateTimePicker").maxDate(e.date);
-});
 $("#event_form").submit(function (e) {
     e.preventDefault();
     processForm();
+});
+
+$(document).on('ready', function () {
+
+    let datetimepicker = $("#datetimepicker");
+    let datetimepicker1 = $("#datetimepicker1");
+    datetimepicker.datetimepicker({
+        inline: true,
+        sideBySide: true,
+        format: 'LT'
+    });
+    datetimepicker1.datetimepicker({
+        inline: true,
+        sideBySide: true,
+        format: 'LT'
+    });
+    datetimepicker.on("dp.change", function (e) {
+        datetimepicker1.data("DateTimePicker").minDate(e.date);
+    });
+    datetimepicker1.on("dp.change", function (e) {
+        datetimepicker.data("DateTimePicker").maxDate(e.date);
+    });
 });
