@@ -37,6 +37,7 @@ class Database
     }
 }
 
+#Creates, Reads, Updates and Destroys as well as Escaping inputs
 class CRUD extends Database
 {
     #The purpose of methods will be described alongside the function declarations
@@ -82,7 +83,8 @@ class CRUD extends Database
     }
 }
 
-class UserDB extends CRUD #Class for creation and validation of user accounts
+#Class for creation and validation of user accounts
+class UserDB extends CRUD
 {
     public $errors = [];
 
@@ -183,6 +185,7 @@ class UserDB extends CRUD #Class for creation and validation of user accounts
     }
 }
 
+#Class for logging user into account and managing account details
 class Login extends CRUD
 {
     public function __construct()
@@ -270,6 +273,7 @@ class Login extends CRUD
     }
 }
 
+#Class for uploading images to server as user
 class myImages extends CRUD
 {#For displaying images
     public function __construct()
@@ -295,7 +299,7 @@ class myImages extends CRUD
     private function Validate($file, $username)
     {
         $pathparts = pathinfo($file['name']);
-        $MaxFileSize = 10000000; #Currently at 10MB, if changed, must change manage.js file limit as well
+        $MaxFileSize = 20000000; #Currently at 20MB, if changed, must change manage.js file limit as well
         $ExtensionsAllowed = array("jpeg", "jpg", "png"); #Define file types that will pass the validation
         $temp = explode(".", $file['name']); #Get file extension by splitting filename into sections, separated by "." and selecting last section
         $FileExtension = end($temp);
@@ -338,9 +342,10 @@ class myImages extends CRUD
     }
 }
 
+#Class for validating and processing all event content and adding event to database
 class addEvent extends CRUD
 {
-    private $supported_tags = ["html", "body", "h1", "h2", "h3", "h4", "h5", "span", "p", "b", "div", "em", "strong", "a", "ul", "li", "ol", "br", "font", "i"];
+    private $supported_tags = ["html", "body", "h1", "h2", "h3", "h4", "h5", "span", "p", "b", "div", "em", "strong", "a", "ul", "li", "ol", "br", "font", "i", "u"];
 
     public function __construct()
     {
@@ -426,6 +431,7 @@ class addEvent extends CRUD
     }
 }
 
+#Class for grabbing details about event so the event can be viewed
 class Event extends CRUD
 {
     public function __construct()
@@ -536,6 +542,7 @@ class Event extends CRUD
 
 }
 
+#Class to display all events in thumbnail formats
 class Featured extends Event
 {
     public function __construct()
@@ -550,13 +557,50 @@ class Featured extends Event
         $description = $this->getData("SELECT Content FROM EventContent WHERE EventID='$eventID' AND Datatype='text' ORDER BY ContentOrder ASC LIMIT 1;")[0]['Content']; #Get the first paragraph of the event as the description, will be wrapped later
         $title = $this->getData("SELECT Title FROM Events WHERE ID='$eventID';")[0]['Title']; #Get title of event
 
-        $random_thumbnail_id = $this->getData("SELECT Content FROM EventContent WHERE Datatype='image' AND EventID='$eventID' ORDER BY RAND() LIMIT 1;")[0]['Content']; #Grab a random image from event
+        $random_thumbnail_id = $this->getData("SELECT Content FROM EventContent WHERE Datatype='image' AND EventID='$eventID'")[0]['Content']; #Grab a random image from event
         $thumbnail_src = $this->getImage($random_thumbnail_id, $eventID);
         return ["id" => $eventID, "description" => substr(strip_tags($description), 0, 220) . "...", "thumbnail" => $thumbnail_src, "title" => $title];
     }
 
+    private $filter_fields = ["Occurrence" => "Type"]; #Structure [Table=>Field to filter by]
+
+    #Function to compile all conditions and return event ID's that satisfy conditions
+    function filterEvent($conditions) #OPEN TO INJECTION AS EACH QUERY HAS NOT BEEN SANITIZED IN ARRAY
+    { #Conditions array structure: [Field => Array[Value1, Value2...]]
+        $query = "SELECT ID FROM Events ";
+        if ($conditions != "all") {
+            $array_position = 0;
+            foreach ($conditions as $field => $array) {
+                $field = $this->Escape($field);
+                if ($array_position != 0) {
+                    $query .= "AND ID ";
+                }
+                if ($array_position == 0) {
+                    $query .= "WHERE ID ";
+                }
+                if ($field == "Name") {
+                    $title = $this->Escape($array[0]);
+                    $query .= "IN(SELECT ID FROM Events WHERE INSTR(Title, '{$title}') > 0)";
+                } else if ($field == "PostCode") { #Structure will be [Long, Lat, Range(Miles)]
+                    $long = $array[0];
+                    $lat = $array[1];
+                    $range = $array[2];
+                    $query .= "IN(SELECT Event FROM Location WHERE ( 3959 * acos( cos( radians(" . $lat . ") ) * cos( radians( lat ) ) * cos( radians( lng ) - radians(" . $long . ") ) + sin( radians(" . $lat . ") ) * sin( radians( lat ) ) ) ) < $range)";
+
+                } else {
+                    $list_of_conditions = "'" . implode("','", $array) . "'";
+                    $query .= "IN(SELECT Event FROM $field WHERE " . $this->filter_fields[$field] . " IN($list_of_conditions)) ";
+                }
+                $array_position += 1;
+            }
+        }
+        return $this->getData($query);
+    }
+
+
 }
 
+#Class to give all appropriate statistics to be processed at frontend
 class Statistics extends Event
 { #Object to give statistics about events
     public function __construct()
