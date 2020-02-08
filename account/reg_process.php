@@ -1,7 +1,7 @@
 <?php
 /**Process registration REST API**/
-include_once('/var/www/html/database/config.php'); #Include script, unless there is parent script that has already included
-$database = new UserDB(); #Instantiate CRUD object with Validation options
+include_once('../database/config.php'); #Include script, unless there is parent script that has already included
+$database = new Register(); #Instantiate CRUD object with Validation options
 if ($database->NotEmpty($_POST, ["name", "email", "username", "password"])) { #Check if all wanted fields exist in posted data and are not empty
     #Grab data from POST and escape strings ready for query:
     $username = $database->Escape($_POST['username']);
@@ -12,9 +12,8 @@ if ($database->NotEmpty($_POST, ["name", "email", "username", "password"])) { #C
         if (!($database->UserExists($username, "Username"))) {
             $salt = $database->GenerateSalt();
             $password = md5($_POST['password'] . $salt);
-
             $query = "INSERT INTO Users (Username, Password,Email,Fullname,Reputation, Salt) VALUES ('$username','$password','$email','$name', 0, '$salt')";
-        $result = $database->Execute($query);#Register user in database
+            $result = $database->Execute($query);#Register user in database
         } else {
             $database->errors[] = "User already exists!";
         }
