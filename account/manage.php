@@ -4,7 +4,6 @@ $title = "Manage My Account";
 $scripts = array("manage.js", "../images/upload_handler.js");
 include('../header.php');
 include('../database/config.php');
-$account = new Login();
 $Image = new myImages();
 #If a user field does not appear on this page, it probably isn't in the LinkedEditable table, add it!
 ?>
@@ -22,33 +21,11 @@ $Image = new myImages();
         <a data-toggle="collapse" href="#account" role="button"
            aria-expanded="false">
             <h2>My account</h2></a>
-        <div class="collapse in" id="account">
+        <div class="collapse in row" id="account">
             <input type="text" style="display:none">
             <!--Used to distract browser from actual password and username fields so it doesn't autofill!-->
             <input type="password" style="display:none">
-            <?
-            $fields = $account->AccountFields();
-            foreach ($fields
 
-                     as $field) {
-                if ($field["Viewable"] == true) {#If actual value of field should not be viewed by user, hide it (for instance password)
-                    $valueAttribute = $_SESSION[$field['UserField']];
-                } else {
-                    $valueAttribute = "Hidden value";
-                }
-                ?>
-                <div class="col-md-4">
-                    <label>
-                        <?php echo $field['UserField'] ?>:
-                        <br>
-                        <input type="<?php echo $field['Datatype'] ?>" name="<?php echo $field['UserField'] ?>"
-                               value="<?php echo $valueAttribute ?>"
-                               onchange="updateValue('<?php echo $field['UserField'] ?>',this.value)"
-                               class="form-control"/>
-                    </label>
-                </div>
-                <?
-            } ?>
             <button type="button" onclick="LogOut()" class="btn btn-primary">Logout
             </button>
         </div>
@@ -56,17 +33,6 @@ $Image = new myImages();
            aria-expanded="false">
             <h2>My images</h2></a>
         <div id="images" class="collapse in image-upload row">
-            <?php
-            $images_arr = $Image->DisplayImages($_SESSION['Username']);
-            foreach ($images_arr as $image) {#Structure: Filename, Filetype
-                $path = "/events/images/" . $_SESSION['Username'] . "/" . $image['Filename'] . "." . $image['Filetype'];
-                ?>
-                <div class="col-md-2 img-thumb">
-                    <a onclick="Modal('<?php echo $path ?>')"><img src="<?php echo $path; ?>"/></a>
-                </div>
-                <?
-            }
-            ?>
         </div>
         <a data-toggle="collapse" href="#image-upload" role="button"
            aria-expanded="false">
@@ -92,7 +58,7 @@ $Image = new myImages();
             <img src="" id="modalImage"/>
         </div>
 
-        <a href="/events/statistics.php" alt="Event Statistics" class="btn btn-primary">My Event Statistics</a>
+        <a href="/events/statistics.php" class="btn btn-primary">My Event Statistics</a>
     </div>
     <?
     } else {
