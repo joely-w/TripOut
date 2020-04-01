@@ -1,13 +1,22 @@
-<?
+<?php
 /**Login user REST API**/
+/**Entirety of login_process.php**/
+include_once('../database/config.php'); #Include classes file
+$database = new Login(); #Instantiate login class
 
-include_once('/var/www/html/database/config.php'); #Include script, unless there is parent script that has already included
-$database = new UserDB();
-if ($database->NotEmpty($_POST, ["id", "password"])) { #Check if all wanted fields exist in posted data and are not empty
-    if ($database->VerifyUser($_POST['id'], $_POST['password'])) {
-        echo json_encode(array('success' => 1)); #Return success
-    } else {
-        echo json_encode(array('success' => 0, 'errors' => $database->errors));
-    }
 
+#Call user authentication method
+$login_data = $database->authenticateUser($_POST['id'], $_POST['password']);
+
+#If user successfully authenticated
+if ($login_data != false) {
+    #Initiate device session with user data
+    $database->loginDevice($login_data);
+    #Report success
+    echo json_encode(['success' => 1]);
+} #If user not successfully authenticated
+else {
+    #Report error
+    echo json_encode(['success' => 0, 'errors' => $database->errors]);
 }
+
