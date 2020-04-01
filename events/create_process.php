@@ -1,28 +1,16 @@
 <?php
-include_once('../database/config.php'); #Include script, unless there is parent script that has already included
-session_start();
+/**Entirety of create_process.php**/
+include_once('../database/config.php'); #Include classes file
+session_start(); #Start session so that user can be identified
 
-$Event = new addEvent();
-$generatedEvent = $Event->eventCreate($_POST['eventTitle'], $_SESSION['Username']);
-$element_index = 0;
-print_r($_POST['eventLocation']);
-$Event->addOccurence($generatedEvent, $_POST['eventOccurence']);
-$Event->addLocation($generatedEvent, $_POST['eventLocation']);
-if ($generatedEvent != false) {
-    foreach ($_POST['content'] as $section) {
-        if ($section['dataType'] == "text") { #If content piece is text, and not malicious
-            $Event->addContent($generatedEvent, "text", $section['dataSrc'], $element_index); #Add text to database
-        } elseif ($section['dataType'] == "image") {
-            foreach ($section['dataSrc'] as $image_key) {
-                $Event->addContent($generatedEvent, "image", $image_key, $element_index); #Add image to database
-            }
-        }
-        $element_index++;
-    }
+#Instantiate add event class
+$new_event = new addEvent();
+
+#Submit event and report status
+if ($new_event->eventCreate($_POST)) {
+    #If event is created successfully
     echo json_encode(["success" => 1]);
 } else {
-    echo json_encode(['success' => 0, "errors" => $Event->errors]);
-    #Failure message
+    #If event creation fails, report error
+    echo json_encode(["success" => 0, "errors" => $new_event->errors]);
 }
-
-
