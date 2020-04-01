@@ -1,6 +1,6 @@
 <?php
 $title = "Browse Events";
-$scripts = array("browse.js");
+$scripts = array("browse.js", "//cdnjs.cloudflare.com/ajax/libs/showdown/1.9.1/showdown.min.js");
 include('../header.php'); ?>
 <body>
 <?php include('../navigation.php'); ?>
@@ -15,19 +15,19 @@ include('../header.php'); ?>
                 Occurence:
                 <form id="filter">
                     <ul class="ks-cboxtags">
-                        <li><input type="checkbox" id="once" class="form-check-input" name="Occurrence"
+                        <li><input type="checkbox" id="once" class="form-check-input" name="OccurrenceEventsLinked"
                                    value="once"/>
                             <label for="once">Once</label></li>
-                        <li><input type="checkbox" id="daily" class="form-check-input" name="Occurrence"
+                        <li><input type="checkbox" id="daily" class="form-check-input" name="OccurrenceEventsLinked"
                                    value="daily"/>
                             <label for="daily">Daily</label></li>
-                        <li><input type="checkbox" id="weekly" class="form-check-input" name="Occurrence"
+                        <li><input type="checkbox" id="weekly" class="form-check-input" name="OccurrenceEventsLinked"
                                    value="weekly"/>
                             <label for="weekly">Weekly</label></li>
-                        <li><input type="checkbox" id="monthly" class="form-check-input" name="Occurrence"
+                        <li><input type="checkbox" id="monthly" class="form-check-input" name="OccurrenceEventsLinked"
                                    value="monthly"/>
                             <label for="monthly">Monthly</label></li>
-                        <li><input type="checkbox" id="yearly" class="form-check-input" name="Occurrence"
+                        <li><input type="checkbox" id="yearly" class="form-check-input" name="OccurrenceEventsLinked"
                                    value="yearly"/>
                             <label for="yearly">Yearly</label></li>
                     </ul>
@@ -57,6 +57,7 @@ include('../header.php'); ?>
             </div>
         </div>
     </div>
+    <div id="Invisible"></div> <!-- Used for converting markdown to string !-->
     <div id="events" class="row flex-row">
 
         <!-- Events will be appended dynamically here!-->
