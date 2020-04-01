@@ -15,6 +15,7 @@ include('../header.php');
 <?php
 include('../navigation.php'); ?>
 <h1 class="center">Create your event</h1>
+<div class="errorfield"></div>
 <form method="post" id="event_form" class="center">
     <a class="btn btn-primary" href="#event_title" onclick="this.remove()">Start creating event</a>
 
@@ -78,9 +79,13 @@ include('../navigation.php'); ?>
 
 </form>
 
-<div id="not_logged_in" class="manage alert alert-danger" role="alert">
-    You're not logged in!
-    <a href="/account/login.php">Login now</a>
+<div class="row not_logged_in">
+    <div class="col-md-6 col-md-offset-3">
+        <div class="manage alert alert-danger" role="alert">
+            You're not logged in!
+            <a href="/account/login.php">Login now</a>
+        </div>
+    </div>
 </div>
 <?
 $scripts_footer = array("create.js");
