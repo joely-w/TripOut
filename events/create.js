@@ -3,126 +3,224 @@ if (isLoggedIn()['Status'] === true) { //If logged in, show event creation form
 } else { //Else display not logged in notification
     $("#not_logged_in").css("visibility", "visible");
 }
-
-class formHandler {
+class Create {
     constructor() {
-        this.current_post = ""; //Variable to store the current postcode
-        this.content_fields = []; //Array to contain JSON objects containing form data
-        this.current_recurrence = ""; //Variable to store the creators latest occurrence choice
-        this.number_of_fields = 0; //Variable to keep track of how many sections creator adds
-        this.zoom = $("#zoom"); //Elements selected to remove duplicate selectors
+        //Declare variable to store the current postcode
+        this.current_post = "";
+
+        //Declare array to contain JSON objects containing form data
+        this.content_fields = [];
+
+        //Declare variable to store the creators latest occurrence choice
+        this.current_recurrence = "";
+
+        //Declare variable to keep track of how many sections creator adds
+        this.number_of_fields = 0;
+
+        //Declare selectors to remove duplicate selectors
+        this.zoom = $("#zoom");
         this.line1 = $("#line1");
         this.line2 = $("#line2");
+
+        //Declare time selectors as attributes to remove duplicate selectors
+        this.starttime = $("#datetimepicker");
+        this.endtime = $("#datetimepicker1");
     }
 
-    ImageAppender(array_index, data_value) {
-        let image_array = this.content_fields[array_index]['dataSrc']; //Select which object to modify in contentFields
-        const index = image_array.indexOf(data_value); //Find if image already exists in object
-        if (index > -1) { //If it does then remove it from array
-            this.content_fields[array_index].dataSrc.splice(index, 1);
-        } else { //If it does not, add it to the array
-            this.content_fields[array_index].dataSrc.push(data_value);
+    imageAppender(array_index, data_value) {
+        //Select which object to modify in content_fields
+        let image_array = this.content_fields[array_index].data_src;
+
+        //Find if image already exists in object
+        const index = image_array.indexOf(data_value);
+
+        //If image does exist in array
+        if (index > -1) {
+            //Remove image from array
+            this.content_fields[array_index].data_src.splice(index, 1);
+        }
+        //If image does not exist in array
+        else {
+            //Add image to array
+            this.content_fields[array_index].data_src.push(data_value);
         }
     }
 
-    AddImage() {
-        let container = document.createElement("div"); //Create container for the image checkboxes
-        container.className = "content-el image-upload select-image row"; //Add classes needed for styling
-        container.id = (this.number_of_fields).toString(); //Assign ID to container, that will be used to identify place in contentFields, as well as order in content
-        let object = this; //Used to avoid confusion with calling "this" as multiple functions
-        $.ajax({ //Make an AJAX call to the server to obtain all images that creator has uploaded to their account
+    addImage() {
+        //Create a container to store dialogue in
+        let container = document.createElement("div");
+
+        //Add classes needed for styling
+        container.className = "content-el image-upload select-image row";
+
+        //Assign ID to container, that will be used to identify place in content_fields, as well as order in content
+        container.id = (this.number_of_fields).toString();
+
+        //Declare variable for class to avoid issues with scope of "this"
+        let object = this;
+
+        //Make an AJAX call to the server to obtain all images that creator has uploaded to their account
+        $.ajax({
             url: "/images/myImages.php",
             type: 'GET',
             dataType: "json",
             success: function (result) {
+                //Declare index variable
                 let index;
-                //Makes sure that if the user adds the image content first that the index used to add image to correct place in contentFields is still correct
+
+                //Ensure that index in content_fields is always correct
                 if (object.number_of_fields > 0) {
                     index = object.number_of_fields;
                 } else {
                     index = 1;
                 }
+
                 //Loop through images that server has sent back
                 for (let i = 0; i < result.length; i++) {
-                    let img_container = document.createElement("div"); //Create container for image
-                    img_container.className = "col-md-2 img-thumb"; //Add necessary classes to image to give checkbox effect and to put into column
+                    //Create container for image
+                    let img_container = document.createElement("div");
+
+                    //Add necessary classes to image to give checkbox effect and to put into column
+                    img_container.className = "col-md-2 img-thumb";
+
+                    //Add checkbox to image container, where the value is the image id and the id is the position in content_fields
                     img_container.innerHTML = `<input type="checkbox" class="image_thumbnail" value="${result[i][1]}" id="${index}-${i}"> 
                                                <label for="${index}-${i}">
-                                                <img src="${result[i][0]}" />
-                                               </label>`; //Add checkbox to image container, where the value is the image id and the id is the position in content_fields
-                    container.appendChild(img_container); //Append to image container and go to next image
+                                                <img src="${result[i][0]}"  alt=""/>
+                                               </label>`;
+
+                    //Add to image container and go to next image
+                    container.appendChild(img_container);
                 }
             }
         });
 
-        this.content_fields.push({dataType: 'image', dataSrc: []}); //Add object to contentFields with blank array that image keys can be inserted into by the ImageAppender
-        $("#usercontent").append(($(container))); //Now that the container is fully populated with images, append to DOM
-        this.number_of_fields++; //Increment number of fields in DOM
+        //Add JSON object to content_fields with blank array that image keys can be inserted into by the ImageAppender
+        this.content_fields.push({data_type: 'image', data_src: []});
+
+        //Now that the container is fully populated with images, append to DOM
+        $("#usercontent").append(($(container)));
+
+        //Increment number of fields in DOM
+        this.number_of_fields++;
     }
 
-    AddText() {
-        let container = document.createElement("textarea"); //Create textarea
-        container.id = 'Text' + this.number_of_fields; //Set textarea's ID
-        $("#usercontent").append(container); //Add textarea to DOM
-        this.content_fields.push({ //Add data to contentFields
-            dataType: 'text',
-            dataSrc: new SimpleMDE({element: document.getElementById("Text" + this.number_of_fields)}) //Instantiate SimpleMDE object, which will also turn textarea into full editor
+    addText() {
+        //Create textarea
+        let container = document.createElement("textarea");
+
+        //Set textarea's ID
+        container.id = 'Text' + this.number_of_fields;
+
+        //Add textarea to DOM
+        $("#usercontent").append(container);
+
+        //Add data to contentFields
+        this.content_fields.push({
+            data_type: 'text',
+            //Instantiate SimpleMDE object, which will also turn textarea into full editor
+            data_src: new SimpleMDE({element: document.getElementById("Text" + this.number_of_fields)})
         });
-        this.number_of_fields++; //Increment number of fields in DOM
+
+        //Increment number of fields in DOM
+        this.number_of_fields++;
     }
 
     postCodeLookup(postcode) {
+        //Declare validity of data as true initially
         let error = false;
-        if (postcode.length >= 6 && this.current_post !== postcode) { //If postcode right length and has changed from previous lookup
+
+        //If postcode right length and has changed from previous lookup
+        if (postcode.length >= 6 && this.current_post !== postcode) {
+            //Make AJAX call to Postcodes.io
             $.ajax({
-                url: "https://api.postcodes.io/postcodes/" + postcode, //Make AJAX call to Postcodes.io
+                url: "https://api.postcodes.io/postcodes/" + postcode,
                 type: 'GET',
                 dataType: 'json',
                 async: false,
                 statusCode: {
+                    //If postcode does not exist
                     404: function () {
-                        $("#map").html(`<h3>Postcode not found!</h3>`); //If postcode does not exist, report error
+                        //Report that postcode does not exist
+                        $("#map").html(`<h3>Postcode not found!</h3>`);
+                        //Set data validity to false
                         error = true;
                     }
                 },
-
             });
         }
+        //If data is valid
         if (!error) {
+            //Update current_postcode
             this.current_post = postcode;
-            this.Location(10, 'addr'); //Display map showing area of postcode
-        } else {
+
+            //Display map showing area of postcode
+            this.Location(10, 'addr');
+        }
+        //If data is not valid
+        else {
+            //Fail function
             return false;
         }
     }
 
     Location(chosen_zoom, mode) {
-        let address; //Declare address variable
-        let marker; //Declare marker location variable
-        let resolution = "500x300"; //Resolution for map image
-        let map_resource; //Declare variable to store map image source
-        if (mode === "addr") { //If data being sent is full address, send google maps full address
-            if (this.current_post.length >= 6) { //If postcode is correct length
-                address = encodeURI(this.line1.val() + this.line2.val() + "," + $("#county").val() + "," + this.current_post); //Compile all inputs into one address and encode it to be passed properly in URL
-                marker = encodeURI("size:mid|color:0xFFFF00|label:Venue|") + address; //Compile information for where the map marker will be location and ensure it is format to be passed in URL
-                map_resource = `https://maps.googleapis.com/maps/api/staticmap?center=${address}&size=${resolution}&key=AIzaSyAqt8ejRfMThaP6C3Kfxcd8fN7OpI5RXUc&zoom=${chosen_zoom}&markers=${marker}`; //Compile together into image source
+        //Declare address and marker variables
+        let address;
+        let marker;
+
+        //Declare the resolution for the map image
+        let resolution = "500x300";
+
+        //Declare variable to store map image source
+        let map_resource;
+
+        //If mode is full address
+        if (mode === "addr") {
+            //If postcode is correct length
+            if (this.current_post.length >= 6) {
+                //Compile all inputs into one address and encode it to be passed properly in URL
+                address = encodeURI(this.line1.val() + this.line2.val() + "," + $("#county").val() + "," + this.current_post);
+
+                //Compile information for where the map marker will be location and ensure it is format to be passed in URL
+                marker = encodeURI("size:mid|color:0xFFFF00|label:Venue|") + address;
+
+                //Compile together into image source
+                map_resource = `https://maps.googleapis.com/maps/api/staticmap?center=${address}&size=${resolution}&key=AIzaSyAqt8ejRfMThaP6C3Kfxcd8fN7OpI5RXUc&zoom=${chosen_zoom}&markers=${marker}`;
             }
-        } else { //If mode is not address, must only be displaying postcode
-            address = encodeURI(this.current_post); //Encode postcode to be put in URL
-            marker = encodeURI("size:mid|color:0xFFFF00|label:Venue|") + address; //Encode marker properly to be put in URL
-            map_resource = `https://maps.googleapis.com/maps/api/staticmap?center=${address}&size=${resolution}&key=AIzaSyAqt8ejRfMThaP6C3Kfxcd8fN7OpI5RXUc&zoom=${chosen_zoom}&markers=${marker}`;//Compile together into image source
         }
-        $("#map").html(`<img src="${map_resource}" alt="Map for event"/>`); //Insert image into map container
-        this.zoom.val(chosen_zoom); //Update zoom slider so that zoom is consistent with map
+        //If mode address
+        else {
+            //Encode postcode to be put in URL
+            address = encodeURI(this.current_post);
+
+            //Encode marker properly to be put in URL
+            marker = encodeURI("size:mid|color:0xFFFF00|label:Venue|") + address;
+
+            //Compile together into image source
+            map_resource = `https://maps.googleapis.com/maps/api/staticmap?center=${address}&size=${resolution}&key=AIzaSyAqt8ejRfMThaP6C3Kfxcd8fN7OpI5RXUc&zoom=${chosen_zoom}&markers=${marker}`;
+        }
+        //Write image to map section
+        $("#map").html(`<img src="${map_resource}" alt="Map for event"/>`);
+
+        //Update zoom slider so that zoom is consistent with map
+        this.zoom.val(chosen_zoom);
     }
 
     changeOccurrence(occurrence) {
-        if (occurrence === this.current_reccurence) {//If new selection is same as old selection, terminate
+        //If new selection is same as old selection
+        if (occurrence === this.current_recurrence) {
+            //Terminate
             return false;
         }
+        //Declare container selector
         let container = $("#date");
-        this.current_reccurence = occurrence;
-        switch (occurrence) { //Handle occurrence cases
+
+        //Set current recurrence to chosen occurrence
+        this.current_recurrence = occurrence;
+
+        //Handle occurrence cases
+        switch (occurrence) {
             case "once":
                 container.html(`<div class="col-md-6"><p>Start date</p><div id="startdate"></div></div><div class="col-md-6 .offset-md-3"><p>End date</p><div id="enddate"></div></div>`);
                 $('#startdate').datetimepicker({
@@ -130,19 +228,27 @@ class formHandler {
                     inline: true,
                     sideBySide: true
                 });
+
                 $('#enddate').datetimepicker({
                     format: 'DD/MM/YYYY',
                     inline: true,
                     sideBySide: true,
                     useCurrent: false
                 });
-                $("#startdate").on("dp.change", function (e) { //When start date is changed, update end dates minimum date
+
+                //When start date is changed
+                $("#startdate").on("dp.change", function (e) {
+                    //Update end dates minimum date
                     $('#enddate').data("DateTimePicker").minDate(e.date);
                 });
-                $("#enddate").on("dp.change", function (e) { //When end date is changed, update start dates maximum date
+
+                //When end date is changed
+                $("#enddate").on("dp.change", function (e) {
+                    //Update start dates maximum date
                     $('#startdate').data("DateTimePicker").maxDate(e.date);
                 });
                 break;
+
             case "weekly":
                 container.html(`<label for="recurrence">What day does your event happen on?<select class="select-css" id="day" name="day">
                                         <option selected disabled>Select</option>
@@ -155,6 +261,7 @@ class formHandler {
                                         <option value="6">Saturday</option>
                                 </select></label>`);
                 break;
+
             case "monthly":
                 container.html(`<label>Which week in the month the event on?
                                     <select id="week" class="select-css" name="weeknumber">
@@ -179,6 +286,7 @@ class formHandler {
                                     </select>
                                 </label>`);
                 break;
+
             case "yearly":
                 container.html(`<label>What month does your event happen in?
                                     <select class="form-control" id="month">
@@ -203,173 +311,213 @@ class formHandler {
         }
 
     }
-}
 
-class eventHandler {
-    constructor(form) { //Pass the form object that will handle all the processing
-        this.form = form;
-        this.starttime = $("#datetimepicker"); //Declared here to remove duplicate selectors
-        this.endtime = $("#datetimepicker1");
-    }
+    Listener() {
+        //Assign class to variable to stop "this" being used in wrong scope
+        let handler = this;
 
-    Listener() { //Function to create all event listeners
-        let Handler = this; //Done to avoid mixing up scopes since each event hook could have a "this"
-        Handler.starttime.datetimepicker({ //Initiate start time clock
+        //Initiate start time clock
+        handler.starttime.datetimepicker({
             inline: true,
             sideBySide: true,
             format: 'LT'
         });
 
-        Handler.endtime.datetimepicker({ //Initiate end time clock
+        //Initiate end time clock
+        handler.endtime.datetimepicker({
             inline: true,
             sideBySide: true,
             format: 'LT'
         });
 
-        Handler.starttime.on(
+        //Whenever start time clock changes
+        handler.starttime.on(
             "dp.change",
-            function (e) { //Whenever start time clock changes, update end times clock to have a minimum time of the current value of the start time clock
-                Handler.endtime.data("DateTimePicker").minDate(e.date);
+            function (e) {
+                //Update end times clock to have a minimum time of the current value of the start time clock
+                handler.endtime.data("DateTimePicker").minDate(e.date);
             });
-        Handler.endtime
-            .on(//Whenever end time clock changes, update start times clock to have a maximum time of the current value of the end time clock
+
+        //Whenever end time clock changes
+        handler.endtime
+            .on(
                 "dp.change",
                 function (e) {
-                    Handler.starttime.data("DateTimePicker").maxDate(e.date);
+                    //Update start times clock to have a maximum time of the current value of the end time clock
+                    handler.starttime.data("DateTimePicker").maxDate(e.date);
                 });
+
+        //When dropdown changes state
         $('#recurrence').on(
             'change',
-            function () { //When dropdown changes state
-                Handler.form.changeOccurrence(this.value); //Change occurrence options to match new occurrence type
+            function () {
+                //Change occurrence options to match new occurrence type
+                handler.changeOccurrence(this.value);
             });
 
-        $("#event_form").submit( //When form is submitted
+        //When form is submitted
+        $("#event_form").submit(
             function (e) {
-                e.preventDefault(); //Stop from submitting the traditional way
-                Handler.processForm(); //Call the processForm method
+                //Stop from submitting the traditional way
+                e.preventDefault();
+
+                //Call the processForm method
+                handler.processForm();
             });
 
+        //When a key is pressed in the postcode field
         $("#postcode").on(
             "keyup",
             function () {
-                if (this.value.length > 5) { //If postcode length > 5
-                    Handler.form.postCodeLookup(this.value); //When key is pressed in postcode, call lookup function with value inside postcode
+                //If postcode length is greater than 5
+                if (this.value.length > 5) {
+                    //Call lookup function with value inside postcode
+                    handler.postCodeLookup(this.value);
                 }
             });
-        Handler.form.zoom.on( //When zoom slider is adjusted
+
+        //When zoom slider is adjusted
+        handler.zoom.on(
             'change',
             function () {
-                if (Handler.form.current_post.length >= 6) { //If postcode is a valid length
-                    if (Handler.form.line1.val() !== null) { //If line 1 is not empty, show map in full address mode with new zoom
-                        Handler.form.Location(Handler.form.zoom.val(), 'addr') //Show map
-                    } else { //If line 1 is empty, show map with just postcode mode and new zoom
-                        Handler.form.Location(Handler.zoom.val())
+                //If postcode is a valid length
+                if (handler.current_post.length >= 6) {
+                    //If line 1 is not empty
+                    if (handler.line1.val() !== null) {
+                        //Show map in full address mode with new zoom
+                        handler.Location(handler.form.zoom.val(), 'addr')
+                    }
+                    //If line 1 is empty
+                    else {
+                        //Show map with just postcode mode and new zoom
+                        handler.Location(handler.zoom.val())
                     }
                 }
             });
 
-        $("#addtext").on( //When add text button is clicked, call add text method from the formHandler
+        //When add text button is clicked
+        $("#addtext").on(
             'click',
             function () {
-                Handler.form.AddText()
+                //Call add text method from the formHandler
+                handler.addText()
             });
 
+        //When add image button is clicked
         $("#addimage").on(
             'click',
-            function () {//When add image button is clicked, call add image method from the formHandler
-                Handler.form.AddImage()
-            })
-        ;
-        Handler.form.line1.on('change', function () { //When line 1 of the address is called, update map to show map including line 1 in the address
-            if (Handler.form.current_post.length >= 6 && Handler.form.line1.val() !== null) {
-                Handler.form.Location(14, 'addr'); //When creator has stopped inputting into input, update map as a full address
+            function () {
+                //Call add image method from the formHandler
+                handler.addImage()
+            });
+
+        //When line 1 of the address is changed
+        handler.line1.on('change', function () {
+            //If postcode is valid and line 1 is not empty
+            if (handler.current_post.length >= 6 && handler.line1.val() !== null) {
+                //Show map in full address mode
+                handler.Location(14, 'addr');
             }
         });
+
+        //If any image checkbox is selected
         $('body').on(
             'click',
-            'input.image_thumbnail', //When a checkbox from any image selection section is selected or deselected
+            'input.image_thumbnail',
             function () {
                 //Call the ImageAppender with the position in content_fields and the id of the image
-                Handler.form.ImageAppender(this.id.split("-")[0] - 1, this.value);
+                handler.imageAppender(this.id.split("-")[0] - 1, this.value);
             });
     }
 
     processForm() {
-        let valid = true; //Set form validity to true until found otherwise
-        //Process location data and get longitude/latitude of postcode
+        //Set form validity to true until found otherwise
+        let valid = true;
+
+        //Declare variables to store longitude and latitude in
         let longitude;
         let latitude;
+
+        //Make AJAX call to Postcodes.io API
         $.ajax({
-            url: "https://api.postcodes.io/postcodes/" + this.form.current_post, //Make AJAX call to API
+            url: "https://api.postcodes.io/postcodes/" + this.current_post,
             type: 'GET',
             dataType: "json",
-            async: false, //Finish AJAX function before continuing, means that longitude and latitude can be returned from function
+            //Finish AJAX function before continuing, means that longitude and latitude can obtained
+            async: false,
             success: function (res) {
-                longitude = res['result']['longitude']; //Store longitude and latitude in variables to be used in return statement
+                //Store longitude and latitude in variables to be used in return statement
+                longitude = res['result']['longitude'];
                 latitude = res['result']['latitude'];
             },
-            error: function () {//If postcode lookup fails, assume it doesn't exist
-                valid = false; //Fail validation
-                reportError("Postcode not valid!"); //Report error
-
+            //If postcode lookup fails
+            error: function () {
+                //Fail validation
+                valid = false;
+                //Report error
+                reportError("Postcode not valid!");
             }
         });
-        let location_data = { //Save data to JSON object for submission
-            postcode: this.form.current_post,
-            line1: this.form.line1.val(),
-            line2: this.form.line2.val(),
-            county: $("#county").val(),
-            zoom: this.form.zoom.val(),
+        //Save data to JSON object for submission
+        let location_data = {
+            postcode: this.current_post,
+            line1: this.line1.val(),
+            line2: this.line2.val(),
+            town: $("#county").val(),
+            zoom: this.zoom.val(),
             lng: longitude,
             lat: latitude
         };
 
         //Process occurrence
-        let occurrence_data = {}; //Declare blank JSON object to append occurence data to
-        let starttime = this.starttime.data('date'); //Get the start time and end time from the objects instantiated in formHandler
-        let endtime = this.endtime.data('date');
-        switch (this.form.current_recurrence) { //Handle the form data depending on what type of occurrence was selected when submit button was clicked
+
+        //Declare blank JSON object to append occurence data to
+        let occurrence_data = {};
+
+        //Get the start time and end time from the objects instantiated in formHandler
+        let start_time = this.starttime.data('date');
+        let end_time = this.endtime.data('date');
+
+        //Handle the form data depending on what type of occurrence was selected when submit button was clicked
+        switch (this.current_recurrence) {
             case "once":
                 occurrence_data = {
                     type: "once",
-                    startdate: $('#startdate').data('date'),
-                    enddate: $('#enddate').data('date'),
-                    starttime: starttime,
-                    endtime: endtime
+                    start_date: $('#startdate').data('date'),
+                    end_date: $('#enddate').data('date'),
+                    start_time: start_time,
+                    end_time: end_time
                 };
                 break;
             case "daily":
                 occurrence_data = {
                     type: "daily",
-                    starttime: starttime,
-                    endtime: endtime
+                    start_time: start_time,
+                    end_time: end_time
                 };
                 break;
             case "weekly":
-                // noinspection JSJQueryEfficiency
                 occurrence_data = {
                     type: "weekly",
-                    starttime: starttime,
-                    endtime: endtime,
+                    start_time: start_time,
+                    end_time: end_time,
                     day: parseInt($('#day').val())
                 };
                 break;
             case "monthly":
-                // noinspection JSJQueryEfficiency
                 occurrence_data = {
                     type: "monthly",
-                    starttime: starttime,
-                    endtime: endtime,
+                    start_time: start_time,
+                    end_time: end_time,
                     week: $('#week').val(),
                     day: $('#day').val()
                 };
                 break;
             case "yearly":
-                // noinspection JSJQueryEfficiency
                 occurrence_data = {
                     type: "yearly",
-                    starttime: starttime,
-                    endtime: endtime,
+                    start_time: start_time,
+                    end_time: end_time,
                     day: $('#day').val(),
                     month: $('#month').val()
                 };
@@ -379,35 +527,49 @@ class eventHandler {
                 valid = false;
         }
 
+
         //Validate title
         let title = $("#title").val();
-        if (title.length > 128) { //Do validation on title
+        //If title length is greater than 128 characters
+        if (title.length > 128) {
+            //Fail validation
             valid = false;
+            //Report error
             reportError("Title is too long! Must be less than 129 characters")
         }
 
+
         //Process text
-        for (let i = 0; i < this.form.content_fields.length; i++) { //Loop through form content
-            if (this.form.content_fields[i].dataType === "text") { //If text then grab text content and replace the id with the content
-                this.form.content_fields[i].dataSrc = this.form.content_fields[i].dataSrc.value(); //Replace SimpleMDE objects with content inside text editors
+
+        //Loop through form content
+        for (let i = 0; i < this.content_fields.length; i++) {
+            //If the datatype is text
+            if (this.content_fields[i].data_type === "text") {
+                //Replace SimpleMDE objects with content inside text editors
+                this.content_fields[i].data_src = this.content_fields[i].data_src.value();
             }
         }
-        if (valid) { //If validation has been passed
+
+        //If validation has been passed
+        if (valid) {
             $.ajax({
                 url: "/events/create_process.php",
                 type: "POST",
-                data: { //Compile data together
-                    eventOccurence: occurrence_data,
-                    eventTitle: title,
-                    eventLocation: location_data,
-                    content: this.form.content_fields
+                //Compile data together
+                data: {
+                    event_occurrence: occurrence_data,
+                    event_title: title,
+                    event_location: location_data,
+                    content: this.content_fields
                 },
                 dataType: "json",
                 success: function (response) {
                     if (response['success'] === 1) {
-                        $("#event_form").html("<h1>Event successfully created!"); //Report success
+                        //Report success
+                        $("#event_form").html("<h1>Event successfully created!");
                     } else {
-                        reportError(response['errors'][0]) //If event was not submitted report error
+                        //If event was not submitted report error (server side error)
+                        reportError(response['errors'][0])
                     }
                 },
             });
@@ -415,9 +577,13 @@ class eventHandler {
     }
 }
 
-$(document).ready(function () { //When the DOM is ready, execute anonymous function
-    let event_listener = new eventHandler(new formHandler()); //Instantiate class
-    event_listener.Listener(); //Start listening for any of the form actions to be triggered
-});
 
+//When the DOM is ready, execute anonymous function
+$(document).ready(function () {
+    //Instantiate class
+    let form = new Create();
+
+    //Start listening for any of the form actions to be triggered
+    form.Listener();
+});
 
