@@ -4,35 +4,37 @@ $title = "Login";
 include('../header.php'); ?>
 <body>
 <?php include('../navigation.php'); ?>
-<div class="hero">
-    <ul class="slider">
-        <li id="slider" class="visible"> <!-- Static visible slide -->
-            <img alt="Login to TripOut" src="/images/login.jpg">
-            <div class='login' id="login">
-                <?php if (isset($_GET['failed'])){
-                echo"<div class='alert alert-danger' role='alert'>Login failed! Please try again</div>";
-
-                }
-                if (isset($_SESSION['Username'])) {#If user is logged in then greet?>
-                    <h1 id="register">Hi there <?php echo $_SESSION['Fullname']; ?>!</h1>
-
-                <? } else { #If not logged in, show login form
-                    ?>
-                    <h1 id="register">Login</h1>
-                    <div id="errorfield"></div> <!--Content updated if error occurs!-->
-                    <form id="otherLogin">
-                        <input name='id' placeholder='Username' type='text'/>
-                        <input id='pw' name='password' placeholder='Password' type='password'/>
-                        <input class='animated' type='submit' value='Login'/>
-                        <a class='forgot' href='/account/forgot.php'>Forgot your password?</a>
-                    </form>
-                    <?php
-                } ?>
+<div class="container">
+    <div class="row logged_in">
+        <h1 class="display_username"><!--Append welcome message to user--></h1>
+    </div>
+    <form class="login not_logged_in" id="full_login_form"><!--Will only display if not logged in -->
+        <h1>Login</h1>
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3" id="errorfield">
+                <!--Append any errors to this div-->
             </div>
-
-        </li>
-    </ul>
-
+        </div>
+        <div class="row">
+            <div class="col-md-3 col-md-offset-3">
+                <label>Username or Email
+                    <input name='username' type='text' id="full_username" placeholder="Username/Email"/>
+                </label>
+            </div>
+            <div class="col-md-3">
+                <label>Password
+                    <input name='password' type='password' id="full_password" placeholder="Password"/>
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <button class="btn btn-primary">
+                    Login
+                </button>
+                <a class='forgot' href='/account/forgot.php'>Forgot your password?</a>
+            </div>
+        </div>
+    </form>
 </div>
-
 </body>
